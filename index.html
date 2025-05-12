@@ -3,32 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angelbin</title>
+    <title>Angelbin - Пастбище</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             color: white;
-            overflow-x: hidden;
-            position: relative;
             background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
-        /* Меню-гамбургер */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .menu-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
             cursor: pointer;
         }
         
@@ -38,268 +41,208 @@
             height: 3px;
             background: white;
             margin: 6px 0;
-            transition: 0.4s;
         }
-        
-        /* Меню */
-        .menu {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            transition: 0.4s;
-            z-index: 999;
-            padding-top: 70px;
-        }
-        
-        .menu.active {
-            left: 0;
-        }
-        
-        .menu-item {
-            padding: 15px 20px;
-            color: white;
-            text-decoration: none;
-            display: block;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
-        }
-        
-        .menu-item:hover {
+
+        .add-paste-btn {
             background: #333;
-        }
-        
-        /* Основное содержимое */
-        #initial-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 100;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-        }
-        
-        #initial-message h1 {
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin: 10px 0;
-            font-size: 1.5rem;
-        }
-        
-        #content {
-            display: none;
-            text-align: center;
-            z-index: 10;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 80%;
-            margin-top: 60px;
-            margin-bottom: 20px;
-        }
-        
-        .telegram-link {
-            margin-top: 20px;
-            color: white;
-            text-decoration: underline;
-            font-size: 18px;
-            display: inline-block;
-        }
-        
-        .search-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        
-        #search-input {
-            padding: 10px;
-            width: 300px;
-            border: none;
-            border-radius: 5px 0 0 5px;
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        
-        #search-button {
-            padding: 10px 20px;
-            background-color: #000;
             color: white;
             border: none;
-            border-radius: 0 5px 5px 0;
+            padding: 10px 15px;
             cursor: pointer;
+            border-radius: 5px;
         }
-        
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            min-height: 24px;
-            text-align: left;
-            max-width: 100%;
-            overflow-wrap: break-word;
-        }
-        
-        /* Форма добавления пасты */
-        #add-paste-form {
+
+        .paste-form {
             display: none;
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
+            margin: 20px 0;
         }
-        
-        #paste-content {
+
+        .paste-form textarea {
             width: 100%;
-            height: 150px;
+            height: 100px;
             margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             border: none;
-            border-radius: 5px;
             padding: 10px;
         }
-        
-        #save-paste-btn {
-            padding: 10px 20px;
-            background-color: #000;
+
+        .paste-form button {
+            background: #444;
             color: white;
             border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        .pastes-list {
+            margin-top: 30px;
+        }
+
+        .paste-item {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            margin-bottom: 15px;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .paste-item:hover {
+            background: rgba(50,50,50,0.7);
+        }
+
+        .paste-tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #555;
+            padding: 3px 8px;
+            margin-right: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .paste-full {
+            display: none;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        .initial-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.7);
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Меню-гамбургер -->
-    <div class="menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    
-    <!-- Меню -->
-    <div class="menu">
-        <div class="menu-item" id="add-paste-btn">Add Paste</div>
-        <div class="menu-item">About</div>
-        <div class="menu-item">Contact</div>
-    </div>
-
-    <div id="initial-message">
-        <h1>Все действия произведенные на этом сайте - шутка</h1>
-        <h1>Сделано в развлекательных целях</h1>
-    </div>
-    
-    <div id="content">
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search by @username...">
-            <button id="search-button">Search</button>
+    <div class="container">
+        <div class="initial-message">
+            <h2>Все действия на этом сайте - шутка</h2>
+            <p>Сделано в развлекательных целях</p>
         </div>
-        <div id="result"></div>
-        <a href="https://t.me/AngelbinOffical" class="telegram-link" target="_blank">Offical Angelbin Telegram</a>
-    </div>
-    
-    <!-- Форма добавления пасты -->
-    <div id="add-paste-form">
-        <textarea id="paste-content" placeholder="Введите текст пасты..."></textarea>
-        <button id="save-paste-btn">Save Paste</button>
+
+        <div class="header">
+            <div class="menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <button class="add-paste-btn">Добавить пасту</button>
+        </div>
+
+        <div class="paste-form">
+            <textarea placeholder="Введите текст пасты..."></textarea>
+            <button id="save-paste">Опубликовать</button>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Поиск по тегам или @юзернеймам..." style="width: 100%; padding: 10px; background: rgba(255,255,255,0.9); border: none;">
+        </div>
+
+        <div class="pastes-list" id="pastes-list">
+            <!-- Здесь будут появляться пасты -->
+        </div>
     </div>
 
     <script>
-        // Хранилище паст
-        let pastes = JSON.parse(localStorage.getItem('pastes')) || [];
+        // Хранилище паст (в реальном приложении нужно использовать сервер)
+        let pastes = JSON.parse(localStorage.getItem('angelbin-pastes')) || [];
         
-        // Меню-гамбургер
-        document.querySelector('.menu-btn').addEventListener('click', function() {
-            document.querySelector('.menu').classList.toggle('active');
+        // DOM элементы
+        const pasteForm = document.querySelector('.paste-form');
+        const addPasteBtn = document.querySelector('.add-paste-btn');
+        const savePasteBtn = document.getElementById('save-paste');
+        const pasteTextarea = document.querySelector('.paste-form textarea');
+        const pastesList = document.getElementById('pastes-list');
+        const searchInput = document.getElementById('search-input');
+
+        // Показать/скрыть форму добавления пасты
+        addPasteBtn.addEventListener('click', () => {
+            pasteForm.style.display = pasteForm.style.display === 'block' ? 'none' : 'block';
         });
-        
-        // Кнопка Add Paste в меню
-        document.getElementById('add-paste-btn').addEventListener('click', function() {
-            document.getElementById('add-paste-form').style.display = 'block';
-            document.querySelector('.menu').classList.remove('active');
-        });
-        
-        // Сохранение пасты
-        document.getElementById('save-paste-btn').addEventListener('click', function() {
-            const content = document.getElementById('paste-content').value.trim();
-            
-            if (content) {
-                // Извлекаем юзернеймы из текста (слова, начинающиеся с @)
-                const usernames = content.match(/@\w+/g) || [];
+
+        // Сохранение новой пасты
+        savePasteBtn.addEventListener('click', () => {
+            const text = pasteTextarea.value.trim();
+            if (text) {
+                // Извлекаем теги (слова с #) и юзернеймы (с @)
+                const tags = text.match(/#\w+/g) || [];
+                const usernames = text.match(/@\w+/g) || [];
                 
-                // Создаем новую пасту
                 const newPaste = {
                     id: Date.now(),
-                    content: content,
-                    usernames: usernames,
-                    date: new Date().toLocaleString()
+                    text: text,
+                    tags: [...new Set(tags)], // Удаляем дубликаты
+                    usernames: [...new Set(usernames)],
+                    date: new Date().toLocaleString(),
+                    likes: 0
                 };
+
+                pastes.unshift(newPaste); // Добавляем в начало массива
+                localStorage.setItem('angelbin-pastes', JSON.stringify(pastes));
                 
-                // Добавляем в хранилище
-                pastes.push(newPaste);
-                localStorage.setItem('pastes', JSON.stringify(pastes));
+                pasteTextarea.value = '';
+                pasteForm.style.display = 'none';
                 
-                // Очищаем форму
-                document.getElementById('paste-content').value = '';
-                document.getElementById('add-paste-form').style.display = 'none';
-                
-                alert('Паста сохранена!');
-            } else {
-                alert('Введите текст пасты!');
+                renderPastes(); // Обновляем список
             }
         });
-        
-        // Поиск по юзернеймам
-        document.getElementById('search-button').addEventListener('click', function() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const resultDiv = document.getElementById('result');
+
+        // Рендер списка паст
+        function renderPastes(filter = '') {
+            pastesList.innerHTML = '';
             
-            if (searchTerm.trim() === "") {
-                resultDiv.textContent = "Введите юзернейм (начинается с @)";
+            const filteredPastes = filter 
+                ? pastes.filter(p => 
+                    p.text.toLowerCase().includes(filter.toLowerCase()) ||
+                    p.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())) ||
+                    p.usernames.some(user => user.toLowerCase().includes(filter.toLowerCase()))
+                  )
+                : pastes;
+            
+            if (filteredPastes.length === 0) {
+                pastesList.innerHTML = '<div class="paste-item">Ничего не найдено</div>';
                 return;
             }
             
-            // Ищем пасты, содержащие этот юзернейм
-            const foundPastes = pastes.filter(paste => 
-                paste.usernames.some(username => 
-                    username.toLowerCase().includes(searchTerm)
-                )
-            );
-            
-            if (foundPastes.length > 0) {
-                let html = '<h3>Найдено:</h3>';
-                foundPastes.forEach(paste => {
-                    html += `<div style="margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-                                <p><strong>Дата:</strong> ${paste.date}</p>
-                                <p>${paste.content.replace(/\n/g, '<br>')}</p>
-                            </div>`;
+            filteredPastes.forEach(paste => {
+                const pasteEl = document.createElement('div');
+                pasteEl.className = 'paste-item';
+                pasteEl.innerHTML = `
+                    <div class="paste-preview">${paste.text.length > 100 ? paste.text.substring(0, 100) + '...' : paste.text}</div>
+                    <div class="paste-tags">
+                        ${paste.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        ${paste.usernames.map(user => `<span class="tag">${user}</span>`).join('')}
+                    </div>
+                    <div class="paste-full" style="display: none;">${paste.text}</div>
+                    <small>${paste.date}</small>
+                `;
+                
+                pasteEl.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('tag')) {
+                        const fullText = pasteEl.querySelector('.paste-full');
+                        fullText.style.display = fullText.style.display === 'block' ? 'none' : 'block';
+                    }
                 });
-                resultDiv.innerHTML = html;
-            } else {
-                resultDiv.textContent = "Ничего не найдено для " + searchTerm;
-            }
+                
+                pastesList.appendChild(pasteEl);
+            });
+        }
+
+        // Поиск
+        searchInput.addEventListener('input', (e) => {
+            renderPastes(e.target.value);
         });
-        
-        // Поиск при нажатии Enter
-        document.getElementById('search-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('search-button').click();
-            }
-        });
-        
-        // Скрываем начальное сообщение через 3 секунды
-        setTimeout(function() {
-            document.getElementById('initial-message').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-        }, 3000);
+
+        // Инициализация
+        renderPastes();
     </script>
 </body>
 </html>
