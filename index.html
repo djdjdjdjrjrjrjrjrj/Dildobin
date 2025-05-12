@@ -13,16 +13,65 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
             background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
+
+        /* Меню-гамбургер */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
         
+        .menu-btn span {
+            display: block;
+            width: 30px;
+            height: 3px;
+            background: white;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+        
+        /* Меню */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            transition: 0.4s;
+            z-index: 999;
+            padding-top: 70px;
+        }
+        
+        .menu.active {
+            left: 0;
+        }
+        
+        .menu-item {
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            background: #333;
+        }
+        
+        /* Основное содержимое */
         #initial-message {
             position: absolute;
             top: 50%;
@@ -53,6 +102,8 @@
             padding: 20px;
             border-radius: 10px;
             max-width: 80%;
+            margin-top: 60px;
+            margin-bottom: 20px;
         }
         
         .telegram-link {
@@ -90,10 +141,57 @@
             margin-top: 20px;
             font-size: 18px;
             min-height: 24px;
+            text-align: left;
+            max-width: 100%;
+            overflow-wrap: break-word;
+        }
+        
+        /* Форма добавления пасты */
+        #add-paste-form {
+            display: none;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        #paste-content {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        #save-paste-btn {
+            padding: 10px 20px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <!-- Меню-гамбургер -->
+    <div class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <!-- Меню -->
+    <div class="menu">
+        <div class="menu-item" id="add-paste-btn">Add Paste</div>
+        <div class="menu-item">About</div>
+        <div class="menu-item">Contact</div>
+    </div>
+
     <div id="initial-message">
         <h1>Все действия произведенные на этом сайте - шутка</h1>
         <h1>Сделано в развлекательных целях</h1>
@@ -101,51 +199,107 @@
     
     <div id="content">
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search For Pasta...">
+            <input type="text" id="search-input" placeholder="Search by @username...">
             <button id="search-button">Search</button>
         </div>
         <div id="result"></div>
         <a href="https://t.me/AngelbinOffical" class="telegram-link" target="_blank">Offical Angelbin Telegram</a>
     </div>
+    
+    <!-- Форма добавления пасты -->
+    <div id="add-paste-form">
+        <textarea id="paste-content" placeholder="Введите текст пасты..."></textarea>
+        <button id="save-paste-btn">Save Paste</button>
+    </div>
 
     <script>
-        // Скрываем начальное сообщение через 3 секунды
-        setTimeout(function() {
-            document.getElementById('initial-message').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-        }, 3000);
+        // Хранилище паст
+        let pastes = JSON.parse(localStorage.getItem('pastes')) || [];
         
-        // Обработчик поиска
+        // Меню-гамбургер
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            document.querySelector('.menu').classList.toggle('active');
+        });
+        
+        // Кнопка Add Paste в меню
+        document.getElementById('add-paste-btn').addEventListener('click', function() {
+            document.getElementById('add-paste-form').style.display = 'block';
+            document.querySelector('.menu').classList.remove('active');
+        });
+        
+        // Сохранение пасты
+        document.getElementById('save-paste-btn').addEventListener('click', function() {
+            const content = document.getElementById('paste-content').value.trim();
+            
+            if (content) {
+                // Извлекаем юзернеймы из текста (слова, начинающиеся с @)
+                const usernames = content.match(/@\w+/g) || [];
+                
+                // Создаем новую пасту
+                const newPaste = {
+                    id: Date.now(),
+                    content: content,
+                    usernames: usernames,
+                    date: new Date().toLocaleString()
+                };
+                
+                // Добавляем в хранилище
+                pastes.push(newPaste);
+                localStorage.setItem('pastes', JSON.stringify(pastes));
+                
+                // Очищаем форму
+                document.getElementById('paste-content').value = '';
+                document.getElementById('add-paste-form').style.display = 'none';
+                
+                alert('Паста сохранена!');
+            } else {
+                alert('Введите текст пасты!');
+            }
+        });
+        
+        // Поиск по юзернеймам
         document.getElementById('search-button').addEventListener('click', function() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const resultDiv = document.getElementById('result');
             
-            const availablePastas = [
-                "пример", 
-                "тест", 
-                "паста",
-                "шутка",
-                "развлечение",
-                "ангел",
-                "небеса",
-                "angel",
-                "angelbin"
-            ];
-            
             if (searchTerm.trim() === "") {
-                resultDiv.textContent = "Введите поисковый запрос";
-            } else if (availablePastas.includes(searchTerm)) {
-                resultDiv.textContent = `Найдено: ${searchTerm}`;
+                resultDiv.textContent = "Введите юзернейм (начинается с @)";
+                return;
+            }
+            
+            // Ищем пасты, содержащие этот юзернейм
+            const foundPastes = pastes.filter(paste => 
+                paste.usernames.some(username => 
+                    username.toLowerCase().includes(searchTerm)
+                )
+            );
+            
+            if (foundPastes.length > 0) {
+                let html = '<h3>Найдено:</h3>';
+                foundPastes.forEach(paste => {
+                    html += `<div style="margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                                <p><strong>Дата:</strong> ${paste.date}</p>
+                                <p>${paste.content.replace(/\n/g, '<br>')}</p>
+                            </div>`;
+                });
+                resultDiv.innerHTML = html;
             } else {
-                resultDiv.textContent = "Ничего не найдено";
+                resultDiv.textContent = "Ничего не найдено для " + searchTerm;
             }
         });
         
+        // Поиск при нажатии Enter
         document.getElementById('search-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('search-button').click();
             }
         });
+        
+        // Скрываем начальное сообщение через 3 секунды
+        setTimeout(function() {
+            document.getElementById('initial-message').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }, 3000);
     </script>
 </body>
 </html>
