@@ -14,7 +14,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: black;
             color: white;
             overflow: hidden;
             position: relative;
@@ -28,21 +27,26 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 100;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
         }
         
         #initial-message h1 {
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 10px 0;
         }
         
         #content {
             display: none;
             text-align: center;
             z-index: 10;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
+            max-width: 80%;
         }
         
         .telegram-link {
@@ -50,6 +54,7 @@
             color: white;
             text-decoration: underline;
             font-size: 18px;
+            display: inline-block;
         }
         
         .search-container {
@@ -63,6 +68,7 @@
             width: 300px;
             border: none;
             border-radius: 5px 0 0 5px;
+            background-color: rgba(255, 255, 255, 0.9);
         }
         
         #search-button {
@@ -77,6 +83,7 @@
         #result {
             margin-top: 20px;
             font-size: 18px;
+            min-height: 24px;
         }
     </style>
 </head>
@@ -101,8 +108,8 @@
             document.getElementById('initial-message').style.display = 'none';
             document.getElementById('content').style.display = 'block';
             
-            // Устанавливаем фоновое изображение
-            document.body.style.backgroundImage = "url('https://wallpapercave.com/wp/wp2735091.jpg')";
+            // Устанавливаем фоновое изображение (Кровавый ангел)
+            document.body.style.backgroundImage = "url('https://s2.best-wallpaper.net/wallpaper/1920x1080/1807/Blood-Angels-Warhammer-40000-wings_1920x1080.jpg')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
             document.body.style.backgroundAttachment = "fixed";
@@ -113,23 +120,28 @@
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const resultDiv = document.getElementById('result');
             
-            // Здесь можно добавить список "паст", которые есть на сайте
+            // Список доступных "паст"
             const availablePastas = [
                 "пример", 
                 "тест", 
                 "паста",
                 "шутка",
-                "развлечение"
+                "развлечение",
+                "ангел",
+                "кровь",
+                "warhammer"
             ];
             
-            if (availablePastas.includes(searchTerm)) {
+            if (searchTerm.trim() === "") {
+                resultDiv.textContent = "Введите поисковый запрос";
+            } else if (availablePastas.includes(searchTerm)) {
                 resultDiv.textContent = `Найдено: ${searchTerm}`;
             } else {
                 resultDiv.textContent = "Ничего не найдено";
             }
         });
         
-        // Также можно обрабатывать нажатие Enter в поле ввода
+        // Обработка нажатия Enter в поле ввода
         document.getElementById('search-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('search-button').click();
