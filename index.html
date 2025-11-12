@@ -3,246 +3,1077 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angelbin - Пастбище</title>
+    <title>Plotnikov Peppers - Кейсы</title>
     <style>
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            color: white;
-            background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .menu-btn {
-            cursor: pointer;
+            box-sizing: border-box;
         }
         
-        .menu-btn span {
-            display: block;
-            width: 30px;
-            height: 3px;
-            background: white;
-            margin: 6px 0;
-        }
-
-        .add-paste-btn {
-            background: #333;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
-
-        .paste-form {
-            display: none;
-            margin: 20px 0;
-        }
-
-        .paste-form textarea {
+        
+        .container {
+            max-width: 1200px;
             width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(45deg, #ff9a00, #ff6a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .balance-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .case-container {
+            margin: 20px 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .case-image {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s;
+            background: #333;
+        }
+        
+        .case-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .case-info {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .spin-button {
+            background: linear-gradient(45deg, #ff9a00, #ff6a00);
             border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
+        }
+        
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
+        }
+        
+        .spin-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .spin-area {
+            width: 100%;
+            max-width: 700px;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 25px 0;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ff9a00;
+            display: none;
+        }
+        
+        .spin-items {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transition: transform 0.1s linear;
+        }
+        
+        .spin-item {
+            width: 180px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 10px;
         }
-
-        .paste-form button {
+        
+        .spin-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
             background: #444;
-            color: white;
+        }
+        
+        .spin-item-name {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .result-container {
+            margin-top: 25px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ff9a00;
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .result-title {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: #ff9a00;
+            text-align: center;
+        }
+        
+        .result-image {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            background: #444;
+        }
+        
+        .result-info {
+            margin-top: 12px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .result-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .sell-button, .keep-button {
             border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-        }
-
-        .pastes-list {
-            margin-top: 30px;
-        }
-
-        .paste-item {
-            background: rgba(0,0,0,0.5);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
         }
-
-        .paste-item:hover {
-            background: rgba(50,50,50,0.7);
+        
+        .sell-button {
+            background: linear-gradient(45deg, #00c853, #00e676);
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
         }
-
-        .paste-tags {
-            margin-top: 10px;
+        
+        .sell-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 200, 83, 0.6);
         }
-
-        .tag {
-            display: inline-block;
-            background: #555;
-            padding: 3px 8px;
-            margin-right: 5px;
-            border-radius: 3px;
-            font-size: 12px;
+        
+        .keep-button {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
         }
-
-        .paste-full {
+        
+        .keep-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.6);
+        }
+        
+        .possible-items {
+            width: 100%;
+            margin-top: 35px;
+        }
+        
+        .possible-items h2 {
+            text-align: center;
+            margin-bottom: 18px;
+            color: #ff9a00;
+            font-size: 1.5rem;
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        
+        .item-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .item-card img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #444;
+        }
+        
+        .item-card .item-name {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .item-card .item-price {
+            margin-top: 5px;
+            font-size: 0.75rem;
+            color: #ff9a00;
+        }
+        
+        .center-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ff9a00;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #ff9a00;
+            z-index: 10;
+        }
+        
+        .win-animation {
+            animation: winPulse 1s infinite;
+        }
+        
+        @keyframes winPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 154, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0); }
+        }
+        
+        /* Стили для апгрейда */
+        .upgrade-section {
+            width: 100%;
+            margin-top: 35px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid #ff9a00;
+        }
+        
+        .upgrade-section h2 {
+            text-align: center;
+            margin-bottom: 18px;
+            color: #ff9a00;
+            font-size: 1.5rem;
+        }
+        
+        .upgrade-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .upgrade-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+        }
+        
+        .upgrade-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: #444;
+        }
+        
+        .upgrade-arrow {
+            font-size: 1.8rem;
+            color: #ff9a00;
+        }
+        
+        .upgrade-wheel {
+            width: 250px;
+            height: 250px;
+            position: relative;
+            margin: 0 auto 18px;
+        }
+        
+        .wheel-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00c853 0% 30%,
+                transparent 30% 100%
+            );
+            position: relative;
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        
+        .wheel-pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 35px;
+            background: #ff9a00;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 10;
+        }
+        
+        .wheel-spin-button {
+            background: linear-gradient(45deg, #ff9a00, #ff6a00);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
+            display: block;
+            margin: 18px auto;
+        }
+        
+        .wheel-spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
+        }
+        
+        .wheel-spin-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .upgrade-result {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 1.1rem;
             display: none;
-            background: rgba(0,0,0,0.8);
-            padding: 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-            white-space: pre-wrap;
         }
-
-        .initial-message {
+        
+        /* Стили для инвентаря */
+        .inventory-section {
+            width: 100%;
+            margin-top: 35px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid #ff9a00;
+        }
+        
+        .inventory-section h2 {
+            text-align: center;
+            margin-bottom: 18px;
+            color: #ff9a00;
+            font-size: 1.5rem;
+        }
+        
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .inventory-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .inventory-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .inventory-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #444;
+        }
+        
+        .inventory-item .item-name {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        
+        .inventory-item .item-price {
+            margin-top: 5px;
+            font-size: 0.7rem;
+            color: #ff9a00;
+        }
+        
+        .inventory-item-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .inventory-sell-button {
+            background: linear-gradient(45deg, #00c853, #00e676);
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .inventory-sell-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .select-checkbox {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .empty-inventory {
             text-align: center;
             padding: 20px;
-            background: rgba(0,0,0,0.7);
-            margin-bottom: 20px;
+            color: #999;
+            grid-column: 1 / -1;
+        }
+        
+        .upgrade-success {
+            color: #00c853;
+            font-weight: bold;
+        }
+        
+        .upgrade-fail {
+            color: #ff3d00;
+            font-weight: bold;
+        }
+        
+        .section-divider {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff9a00, transparent);
+            margin: 25px 0;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .case-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .spin-area {
+                height: 150px;
+                max-width: 100%;
+            }
+            
+            .spin-item {
+                width: 150px;
+            }
+            
+            .spin-item-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .upgrade-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .upgrade-item {
+                width: 80%;
+            }
+            
+            .upgrade-wheel {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .items-grid, .inventory-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .case-image {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .spin-button, .sell-button, .keep-button, .wheel-spin-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .items-grid, .inventory-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="initial-message">
-            <h2>Все действия на этом сайте - шутка</h2>
-            <p>Сделано в развлекательных целях</p>
+        <h1>Приветствуем Вас в Plotnikov Peppers</h1>
+        
+        <div class="balance-container">
+            Баланс: <span id="balance">1</span> зв
         </div>
-
-        <div class="header">
-            <div class="menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
+        
+        <div class="case-container">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDI1MCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiByeD0iMTUiIGZpbGw9IiMzMzMiLz4KPHRleHQgeD0iMTI1IiB5PSIxMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPktlaWPCtzwvdGV4dD4KPHN2Zz4=" alt="Кейс" class="case-image" id="caseImage">
+            <div class="case-info">
+                Кейс Plotnikov Peppers<br>
+                Цена: 1 зв
             </div>
-            <button class="add-paste-btn">Добавить пасту</button>
         </div>
-
-        <div class="paste-form">
-            <textarea placeholder="Введите текст пасты..."></textarea>
-            <button id="save-paste">Опубликовать</button>
+        
+        <button class="spin-button" id="spinButton" disabled>Крутить за 1 зв</button>
+        
+        <div class="spin-area" id="spinArea">
+            <div class="spin-items" id="spinItems"></div>
+            <div class="center-line"></div>
         </div>
-
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Поиск по тегам или @юзернеймам..." style="width: 100%; padding: 10px; background: rgba(255,255,255,0.9); border: none;">
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-title">Поздравляем!</div>
+            <div class="result-info">Вам выпал:</div>
+            <img src="" alt="Результат" class="result-image" id="resultImage">
+            <div class="result-info" id="resultItemName"></div>
+            <div class="result-info">
+                Цена: <span id="prizeValue">1000000</span> зв
+            </div>
+            <div class="result-buttons">
+                <button class="sell-button" id="sellButton">Продать</button>
+                <button class="keep-button" id="keepButton">Оставить в инвентаре</button>
+            </div>
         </div>
-
-        <div class="pastes-list" id="pastes-list">
-            <!-- Здесь будут появляться пасты -->
+        
+        <div class="section-divider"></div>
+        
+        <div class="possible-items">
+            <h2>Возможные выигрыши</h2>
+            <div class="items-grid" id="itemsGrid"></div>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="upgrade-section">
+            <h2>Апгрейд скинов</h2>
+            <div class="upgrade-container">
+                <div class="upgrade-item" id="upgradeItem1">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iIzQ0NCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPs+PIERldmljZTwvdGV4dD4KPHN2Zz4=" alt="Предмет 1">
+                    <div class="item-name">Выберите предмет</div>
+                </div>
+                <div class="upgrade-arrow">→</div>
+                <div class="upgrade-item" id="upgradeItem2">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iIzQ0NCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPs+PIERldmljZTwvdGV4dD4KPHN2Zz4=" alt="Предмет 2">
+                    <div class="item-name">Выберите предмет</div>
+                </div>
+            </div>
+            <div class="upgrade-wheel">
+                <div class="wheel-circle" id="wheelCircle">
+                    <div class="wheel-pointer" id="wheelPointer"></div>
+                </div>
+            </div>
+            <button class="wheel-spin-button" id="upgradeButton" disabled>Апгрейд</button>
+            <div class="upgrade-result" id="upgradeResult"></div>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="inventory-section">
+            <h2>Инвентарь</h2>
+            <div class="inventory-grid" id="inventoryGrid">
+                <div class="empty-inventory">Инвентарь пуст</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Хранилище паст (в реальном приложении нужно использовать сервер)
-        let pastes = JSON.parse(localStorage.getItem('angelbin-pastes')) || [];
-        
-        // DOM элементы
-        const pasteForm = document.querySelector('.paste-form');
-        const addPasteBtn = document.querySelector('.add-paste-btn');
-        const savePasteBtn = document.getElementById('save-paste');
-        const pasteTextarea = document.querySelector('.paste-form textarea');
-        const pastesList = document.getElementById('pastes-list');
-        const searchInput = document.getElementById('search-input');
-
-        // Показать/скрыть форму добавления пасты
-        addPasteBtn.addEventListener('click', () => {
-            pasteForm.style.display = pasteForm.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Сохранение новой пасты
-        savePasteBtn.addEventListener('click', () => {
-            const text = pasteTextarea.value.trim();
-            if (text) {
-                // Извлекаем теги (слова с #) и юзернеймы (с @)
-                const tags = text.match(/#\w+/g) || [];
-                const usernames = text.match(/@\w+/g) || [];
-                
-                const newPaste = {
-                    id: Date.now(),
-                    text: text,
-                    tags: [...new Set(tags)], // Удаляем дубликаты
-                    usernames: [...new Set(usernames)],
-                    date: new Date().toLocaleString(),
-                    likes: 0
-                };
-
-                pastes.unshift(newPaste); // Добавляем в начало массива
-                localStorage.setItem('angelbin-pastes', JSON.stringify(pastes));
-                
-                pasteTextarea.value = '';
-                pasteForm.style.display = 'none';
-                
-                renderPastes(); // Обновляем список
-            }
-        });
-
-        // Рендер списка паст
-        function renderPastes(filter = '') {
-            pastesList.innerHTML = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            const caseImage = document.getElementById('caseImage');
+            const spinButton = document.getElementById('spinButton');
+            const spinArea = document.getElementById('spinArea');
+            const spinItems = document.getElementById('spinItems');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultImage = document.getElementById('resultImage');
+            const resultItemName = document.getElementById('resultItemName');
+            const prizeValue = document.getElementById('prizeValue');
+            const sellButton = document.getElementById('sellButton');
+            const keepButton = document.getElementById('keepButton');
+            const balanceElement = document.getElementById('balance');
+            const itemsGrid = document.getElementById('itemsGrid');
+            const inventoryGrid = document.getElementById('inventoryGrid');
+            const upgradeItem1 = document.getElementById('upgradeItem1');
+            const upgradeItem2 = document.getElementById('upgradeItem2');
+            const upgradeButton = document.getElementById('upgradeButton');
+            const wheelCircle = document.getElementById('wheelCircle');
+            const upgradeResult = document.getElementById('upgradeResult');
             
-            const filteredPastes = filter 
-                ? pastes.filter(p => 
-                    p.text.toLowerCase().includes(filter.toLowerCase()) ||
-                    p.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())) ||
-                    p.usernames.some(user => user.toLowerCase().includes(filter.toLowerCase()))
-                  )
-                : pastes;
+            let balance = 1;
+            let isSpinning = false;
+            let currentWinItem = null;
+            let inventory = [];
+            let selectedItems = [];
             
-            if (filteredPastes.length === 0) {
-                pastesList.innerHTML = '<div class="paste-item">Ничего не найдено</div>';
-                return;
-            }
+            // Возможные предметы для выпадения
+            const items = [
+                {
+                    id: 1,
+                    name: "Редкий Плюш Пепе",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iI2ZmOWEwMCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPlLDqWRraWk8L3RleHQ+Cjx0ZXh0IHg9IjQ1IiB5PSI1OCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zNWVtIj5Qw6twZTwvdGV4dD4KPHN2Zz4=",
+                    price: 1000000
+                },
+                {
+                    id: 2,
+                    name: "Эпический Плюш Пепе",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iI2ZmNmEwMCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPs6Vw6FjaGVza2k8L3RleHQ+Cjx0ZXh0IHg9IjQ1IiB5PSI1OCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zNWVtIj5Qw6twZTwvdGV4dD4KPHN2Zz4=",
+                    price: 500000
+                }
+            ];
             
-            filteredPastes.forEach(paste => {
-                const pasteEl = document.createElement('div');
-                pasteEl.className = 'paste-item';
-                pasteEl.innerHTML = `
-                    <div class="paste-preview">${paste.text.length > 100 ? paste.text.substring(0, 100) + '...' : paste.text}</div>
-                    <div class="paste-tags">
-                        ${paste.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        ${paste.usernames.map(user => `<span class="tag">${user}</span>`).join('')}
-                    </div>
-                    <div class="paste-full" style="display: none;">${paste.text}</div>
-                    <small>${paste.date}</small>
+            // Заполняем галерею возможных выигрышей
+            items.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                
+                itemCard.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">${item.price.toLocaleString()} зв</div>
                 `;
                 
-                pasteEl.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('tag')) {
-                        const fullText = pasteEl.querySelector('.paste-full');
-                        fullText.style.display = fullText.style.display === 'block' ? 'none' : 'block';
+                itemsGrid.appendChild(itemCard);
+            });
+            
+            // При клике на кейс активируем кнопку "Крутить"
+            caseImage.addEventListener('click', function() {
+                if (balance >= 1 && !isSpinning) {
+                    spinButton.disabled = false;
+                }
+            });
+            
+            // Функция прокрутки
+            spinButton.addEventListener('click', function() {
+                if (balance < 1 || isSpinning) return;
+                
+                isSpinning = true;
+                spinButton.disabled = true;
+                balance -= 1;
+                balanceElement.textContent = balance;
+                
+                // Показываем область прокрутки
+                spinArea.style.display = 'block';
+                
+                // Заполняем область прокрутки предметами
+                spinItems.innerHTML = '';
+                const itemCount = 50; // Количество элементов для прокрутки
+                
+                for (let i = 0; i < itemCount; i++) {
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
+                    const spinItem = document.createElement('div');
+                    spinItem.className = 'spin-item';
+                    
+                    spinItem.innerHTML = `
+                        <img src="${randomItem.image}" alt="${randomItem.name}" class="spin-item-image">
+                        <div class="spin-item-name">${randomItem.name}</div>
+                    `;
+                    
+                    spinItems.appendChild(spinItem);
+                }
+                
+                // Определяем выигрышный предмет
+                const winIndex = Math.floor(Math.random() * items.length);
+                currentWinItem = {...items[winIndex]};
+                
+                // Анимация прокрутки
+                let position = 0;
+                let speed = 50;
+                let targetPosition = 0;
+                
+                // Вычисляем позицию, на которой должен остановиться выигрышный предмет
+                const itemWidth = 180;
+                const centerOffset = 2; // Смещение для центрирования
+                targetPosition = -(itemCount - centerOffset - winIndex) * itemWidth;
+                
+                const spinAnimation = setInterval(() => {
+                    position -= speed;
+                    
+                    // Замедление при приближении к цели
+                    if (position <= targetPosition + 1000) {
+                        speed *= 0.95;
+                    }
+                    
+                    // Остановка анимации
+                    if (position <= targetPosition) {
+                        clearInterval(spinAnimation);
+                        position = targetPosition;
+                        
+                        // Показываем результат
+                        setTimeout(() => {
+                            resultImage.src = currentWinItem.image;
+                            resultItemName.textContent = currentWinItem.name;
+                            prizeValue.textContent = currentWinItem.price.toLocaleString();
+                            resultContainer.style.display = "flex";
+                            resultImage.classList.add("win-animation");
+                            isSpinning = false;
+                        }, 500);
+                    }
+                    
+                    spinItems.style.transform = `translateX(${position}px)`;
+                }, 20);
+            });
+            
+            // Продажа выигрыша
+            sellButton.addEventListener('click', function() {
+                if (currentWinItem) {
+                    balance += currentWinItem.price;
+                    balanceElement.textContent = balance;
+                    resultContainer.style.display = "none";
+                    spinArea.style.display = "none";
+                    spinButton.disabled = balance < 1;
+                    resultImage.classList.remove("win-animation");
+                    
+                    // Показываем уведомление о продаже
+                    showNotification(`Предмет "${currentWinItem.name}" продан за ${currentWinItem.price.toLocaleString()} зв`);
+                    
+                    currentWinItem = null;
+                }
+            });
+            
+            // Оставить в инвентаре
+            keepButton.addEventListener('click', function() {
+                if (currentWinItem) {
+                    addToInventory(currentWinItem);
+                    resultContainer.style.display = "none";
+                    spinArea.style.display = "none";
+                    spinButton.disabled = balance < 1;
+                    resultImage.classList.remove("win-animation");
+                    
+                    // Показываем уведомление о добавлении в инвентарь
+                    showNotification(`Предмет "${currentWinItem.name}" добавлен в инвентарь`);
+                    
+                    currentWinItem = null;
+                }
+            });
+            
+            // Функция добавления предмета в инвентарь
+            function addToInventory(item) {
+                const inventoryItem = {
+                    ...item,
+                    inventoryId: Date.now() + Math.random()
+                };
+                inventory.push(inventoryItem);
+                updateInventoryDisplay();
+            }
+            
+            // Обновление отображения инвентаря
+            function updateInventoryDisplay() {
+                inventoryGrid.innerHTML = '';
+                
+                if (inventory.length === 0) {
+                    inventoryGrid.innerHTML = '<div class="empty-inventory">Инвентарь пуст</div>';
+                    return;
+                }
+                
+                inventory.forEach(item => {
+                    const inventoryItem = document.createElement('div');
+                    inventoryItem.className = 'inventory-item';
+                    inventoryItem.dataset.id = item.inventoryId;
+                    
+                    inventoryItem.innerHTML = `
+                        <input type="checkbox" class="select-checkbox" onchange="toggleSelectItem(${item.inventoryId})">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toLocaleString()} зв</div>
+                        <div class="inventory-item-actions">
+                            <button class="inventory-sell-button" onclick="sellFromInventory(${item.inventoryId})">Продать</button>
+                        </div>
+                    `;
+                    
+                    inventoryGrid.appendChild(inventoryItem);
+                });
+            }
+            
+            // Функция выбора предмета для апгрейда
+            window.toggleSelectItem = function(inventoryId) {
+                const itemIndex = selectedItems.findIndex(item => item.inventoryId === inventoryId);
+                
+                if (itemIndex === -1) {
+                    // Добавляем предмет в выбранные
+                    const item = inventory.find(item => item.inventoryId === inventoryId);
+                    if (item && selectedItems.length < 2) {
+                        selectedItems.push(item);
+                    }
+                } else {
+                    // Удаляем предмет из выбранных
+                    selectedItems.splice(itemIndex, 1);
+                }
+                
+                // Обновляем отображение выбранных предметов
+                updateUpgradeSelection();
+                
+                // Активируем кнопку апгрейда, если выбрано 2 предмета
+                upgradeButton.disabled = selectedItems.length !== 2;
+            }
+            
+            // Обновление отображения выбранных предметов для апгрейда
+            function updateUpgradeSelection() {
+                if (selectedItems.length >= 1) {
+                    upgradeItem1.innerHTML = `
+                        <img src="${selectedItems[0].image}" alt="${selectedItems[0].name}">
+                        <div class="item-name">${selectedItems[0].name}</div>
+                    `;
+                } else {
+                    upgradeItem1.innerHTML = `
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iIzQ0NCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPs+PIERldmljZTwvdGV4dD4KPHN2Zz4=" alt="Предмет 1">
+                        <div class="item-name">Выберите предмет</div>
+                    `;
+                }
+                
+                if (selectedItems.length >= 2) {
+                    upgradeItem2.innerHTML = `
+                        <img src="${selectedItems[1].image}" alt="${selectedItems[1].name}">
+                        <div class="item-name">${selectedItems[1].name}</div>
+                    `;
+                } else {
+                    upgradeItem2.innerHTML = `
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiByeD0iOCIgZmlsbD0iIzQ0NCIvPgo8dGV4dCB4PSI0NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIwLjM1ZW0iPs+PIERldmljZTwvdGV4dD4KPHN2Zz4=" alt="Предмет 2">
+                        <div class="item-name">Выберите предмет</div>
+                    `;
+                }
+            }
+            
+            // Продажа предмета из инвентаря
+            window.sellFromInventory = function(inventoryId) {
+                const itemIndex = inventory.findIndex(item => item.inventoryId === inventoryId);
+                if (itemIndex !== -1) {
+                    const item = inventory[itemIndex];
+                    balance += item.price;
+                    balanceElement.textContent = balance;
+                    
+                    // Удаляем из выбранных, если предмет был выбран
+                    const selectedIndex = selectedItems.findIndex(selected => selected.inventoryId === inventoryId);
+                    if (selectedIndex !== -1) {
+                        selectedItems.splice(selectedIndex, 1);
+                        updateUpgradeSelection();
+                        upgradeButton.disabled = selectedItems.length !== 2;
+                    }
+                    
+                    // Удаляем из инвентаря
+                    inventory.splice(itemIndex, 1);
+                    updateInventoryDisplay();
+                    
+                    // Показываем уведомление
+                    showNotification(`Предмет "${item.name}" продан за ${item.price.toLocaleString()} зв`);
+                }
+            };
+            
+            // Апгрейд предметов
+            upgradeButton.addEventListener('click', function() {
+                if (selectedItems.length !== 2) return;
+                
+                upgradeButton.disabled = true;
+                
+                // Удаляем выбранные предметы из инвентаря
+                selectedItems.forEach(item => {
+                    const itemIndex = inventory.findIndex(invItem => invItem.inventoryId === item.inventoryId);
+                    if (itemIndex !== -1) {
+                        inventory.splice(itemIndex, 1);
                     }
                 });
                 
-                pastesList.appendChild(pasteEl);
+                // Анимация вращения колеса
+                const spinDuration = 3000; // 3 секунды
+                const startTime = Date.now();
+                
+                const spinWheel = () => {
+                    const currentTime = Date.now();
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / spinDuration, 1);
+                    
+                    // Замедление в конце
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const rotation = easeOut * 1800; // 5 полных оборотов
+                    
+                    wheelCircle.style.transform = `rotate(${rotation}deg)`;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(spinWheel);
+                    } else {
+                        // Определяем результат
+                        const finalAngle = rotation % 360;
+                        const success = finalAngle >= 0 && finalAngle <= 108; // 30% шанс успеха
+                        
+                        // Показываем результат
+                        if (success) {
+                            // Создаем новый предмет с увеличенной ценой
+                            const newItem = {
+                                ...selectedItems[0],
+                                inventoryId: Date.now() + Math.random(),
+                                price: Math.max(selectedItems[0].price, selectedItems[1].price) * 2,
+                                name: "Улучшенный " + selectedItems[0].name
+                            };
+                            
+                            // Добавляем новый предмет в инвентарь
+                            addToInventory(newItem);
+                            
+                            upgradeResult.innerHTML = `
+                                <div class="upgrade-success">Апгрейд успешен! Вы получили улучшенный предмет!</div>
+                                <img src="${newItem.image}" alt="${newItem.name}" style="width: 80px; height: 80px; margin-top: 10px; border-radius: 8px;">
+                                <div>${newItem.name}</div>
+                                <div>Цена: ${newItem.price.toLocaleString()} зв</div>
+                            `;
+                            
+                            showNotification("Апгрейд успешен! Получен улучшенный предмет");
+                        } else {
+                            upgradeResult.innerHTML = `
+                                <div class="upgrade-fail">Апгрейд не удался! Оба предмета сгорели.</div>
+                            `;
+                            showNotification("Апгрейд не удался! Предметы сгорели");
+                        }
+                        
+                        upgradeResult.style.display = 'block';
+                        
+                        // Сбрасываем выбор
+                        selectedItems = [];
+                        updateUpgradeSelection();
+                        
+                        // Сбрасываем колесо через 3 секунды
+                        setTimeout(() => {
+                            wheelCircle.style.transform = 'rotate(0deg)';
+                            upgradeResult.style.display = 'none';
+                            upgradeButton.disabled = selectedItems.length !== 2;
+                        }, 3000);
+                    }
+                };
+                
+                spinWheel();
             });
-        }
-
-        // Поиск
-        searchInput.addEventListener('input', (e) => {
-            renderPastes(e.target.value);
+            
+            // Функция показа уведомления
+            function showNotification(message) {
+                // Создаем элемент уведомления
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    border-left: 4px solid #ff9a00;
+                    z-index: 1000;
+                    font-size: 0.9rem;
+                    max-width: 280px;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+                    animation: slideIn 0.3s ease-out;
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Удаляем уведомление через 3 секунды
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease-in';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // Добавляем стили для анимации уведомлений
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
         });
-
-        // Инициализация
-        renderPastes();
     </script>
 </body>
-</html>
+    </html>
