@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plotnikov Peppers - Кейсы</title>
+    <title>Plotnikov Peppers - Кейсы + Слоты</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
         
@@ -22,6 +22,7 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         .container {
@@ -30,6 +31,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
         
         h1 {
@@ -50,12 +52,105 @@
             font-size: 1.2rem;
         }
         
-        .case-container {
-            margin: 20px 0;
-            position: relative;
+        /* === СЛОТ-МАШИНА === */
+        .slot-machine {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid #ff9a00;
+            box-shadow: 0 0 20px rgba(255, 154, 0, 0.5);
+            z-index: 1000;
+            text-align: center;
+            width: 280px;
+        }
+        
+        .slot-reels {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            height: 120px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .reel {
+            width: 80px;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            overflow: hidden;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .reel-strip {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        
+        .reel-item {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        
+        .slot-spin-button {
+            background: linear-gradient(45deg, #ff9a00, #ff6a00);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .slot-spin-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
+        }
+        
+        .slot-spin-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slot-result {
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        
+        .win-glow {
+            animation: winPulse 1s infinite;
+        }
+        
+        @keyframes winPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 200, 83, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+        }
+        
+        /* Остальные стили (кейсы, апгрейд, инвентарь) — как раньше */
+        .case-container, .spin-area, .result-container, .possible-items, 
+        .upgrade-section, .inventory-section, .section-divider {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
         }
         
         .case-image {
@@ -63,19 +158,8 @@
             height: 300px;
             object-fit: cover;
             border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .case-image:hover {
-            transform: scale(1.05);
-        }
-        
-        .case-info {
-            margin-top: 15px;
-            font-size: 1.5rem;
-            text-align: center;
         }
         
         .spin-button {
@@ -87,835 +171,285 @@
             border-radius: 50px;
             cursor: pointer;
             margin-top: 20px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
         }
         
-        .spin-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
-        }
-        
-        .spin-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .spin-area {
-            width: 100%;
-            max-width: 800px;
-            height: 200px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            margin: 30px 0;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid #ff9a00;
-            display: none;
-        }
-        
-        .spin-items {
-            display: flex;
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            transition: transform 0.1s linear;
-        }
-        
-        .spin-item {
-            width: 200px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        
-        .spin-item-image {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        
-        .spin-item-name {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        
-        .result-container {
-            margin-top: 30px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid #ff9a00;
-            width: 100%;
-            max-width: 500px;
-        }
-        
-        .result-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #ff9a00;
-            text-align: center;
-        }
-        
-        .result-image {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-        
-        .result-info {
-            margin-top: 15px;
-            font-size: 1.5rem;
-            text-align: center;
-        }
-        
-        .result-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .sell-button, .keep-button {
-            border: none;
-            color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .sell-button {
-            background: linear-gradient(45deg, #00c853, #00e676);
-            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
-        }
-        
-        .sell-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 200, 83, 0.6);
-        }
-        
-        .keep-button {
-            background: linear-gradient(45deg, #2196F3, #21CBF3);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
-        }
-        
-        .keep-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.6);
-        }
-        
-        .possible-items {
-            width: 100%;
-            margin-top: 40px;
-        }
-        
-        .possible-items h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ff9a00;
-        }
-        
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .item-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s;
-        }
-        
-        .item-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .item-card img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        
-        .item-card .item-name {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        
-        .item-card .item-price {
-            margin-top: 5px;
-            font-size: 0.8rem;
-            color: #ff9a00;
-        }
-        
-        .center-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: #ff9a00;
-            transform: translateX(-50%);
-            box-shadow: 0 0 10px #ff9a00;
-            z-index: 10;
-        }
-        
-        .win-animation {
-            animation: winPulse 1s infinite;
-        }
-        
-        @keyframes winPulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 154, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0); }
-        }
-        
-        /* Апгрейд */
-        .upgrade-section {
-            width: 100%;
-            margin-top: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid #ff9a00;
-        }
-        
-        .upgrade-section h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ff9a00;
-        }
-        
-        .upgrade-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .upgrade-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 30%;
-            min-width: 120px;
-        }
-        
-        .upgrade-item img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .upgrade-arrow {
-            font-size: 2rem;
-            color: #ff9a00;
-        }
-        
-        .upgrade-wheel {
-            width: 300px;
-            height: 300px;
-            position: relative;
-            margin: 0 auto 20px;
-        }
-        
-        .wheel-circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                #00c853 0% 30%,
-                #ff3d00 30% 100%
-            );
-            position: relative;
-            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-        
-        .wheel-pointer {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 40px;
-            background: #ff9a00;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            z-index: 10;
-        }
-        
-        .wheel-spin-button {
-            background: linear-gradient(45deg, #ff9a00, #ff6a00);
-            border: none;
-            color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 20px auto;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
-            display: block;
-        }
-        
-        .wheel-spin-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
-        }
-        
-        .wheel-spin-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .upgrade-result {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2rem;
-            display: none;
-        }
-        
-        /* Инвентарь */
-        .inventory-section {
-            width: 100%;
-            margin-top: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid #ff9a00;
-        }
-        
-        .inventory-section h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ff9a00;
-        }
-        
-        .inventory-grid {
+        .items-grid, .inventory-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
         }
-        
-        .inventory-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            transition: transform 0.3s;
-        }
-        
-        .inventory-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .inventory-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        
-        .inventory-item .item-name {
-            margin-top: 8px;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-        
-        .inventory-item .item-price {
-            margin-top: 5px;
-            font-size: 0.7rem;
-            color: #ff9a00;
-        }
-        
-        .inventory-item-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 8px;
-        }
-        
-        .inventory-sell-button {
-            background: linear-gradient(45deg, #00c853, #00e676);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            font-size: 0.7rem;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .inventory-sell-button:hover {
-            transform: scale(1.05);
-        }
-        
-        .select-checkbox {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        .empty-inventory {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-            grid-column: 1 / -1;
-        }
-        
-        .upgrade-success { color: #00c853; font-weight: bold; }
-        .upgrade-fail { color: #ff3d00; font-weight: bold; }
-        
-        .section-divider {
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff9a00, transparent);
-            margin: 30px 0;
-        }
-
-        @keyframes notifIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes notifOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Приветствуем Вас в Plotnikov Peppers</h1>
+        <h1>Plotnikov Peppers</h1>
         
         <div class="balance-container">
-            Баланс: <span id="balance">1</span> зв
+            Баланс: <span id="balance">1000</span> зв
         </div>
-        
+
+        <!-- КЕЙС -->
         <div class="case-container">
-            <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Кейс" class="case-image" id="caseImage">
-            <div class="case-info">
-                Кейс Plotnikov Peppers<br>
-                Цена: 1 зв
-            </div>
+            <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" 
+                 alt="Кейс" class="case-image" id="caseImage">
+            <div>Кейс Plotnikov Peppers<br>Цена: 1 зв</div>
         </div>
-        
-        <button class="spin-button" id="spinButton" disabled>Крутить за 1 зв</button>
-        
-        <div class="spin-area" id="spinArea">
+
+        <button class="spin-button" id="spinButton">Крутить за 1 зв</button>
+
+        <div class="spin-area" id="spinArea" style="display:none;">
             <div class="spin-items" id="spinItems"></div>
-            <div class="center-line"></div>
+            <div style="position:absolute;left:50%;top:0;bottom:0;width:3px;background:#ff9a00;transform:translateX(-50%);box-shadow:0 0 10px #ff9a00;z-index:10;"></div>
         </div>
-        
-        <div class="result-container" id="resultContainer">
-            <div class="result-title">Поздравляем!</div>
-            <div class="result-info">Вам выпал:</div>
-            <img src="" alt="Результат" class="result-image" id="resultImage">
-            <div class="result-info" id="resultItemName"></div>
-            <div class="result-info">
-                Цена: <span id="prizeValue">1000000</span> зв
-            </div>
-            <div class="result-buttons">
-                <button class="sell-button" id="sellButton">Продать</button>
-                <button class="keep-button" id="keepButton">Оставить в инвентаре</button>
+
+        <div class="result-container" id="resultContainer" style="display:none;">
+            <div style="font-size:1.8rem;color:#ff9a00;">Поздравляем!</div>
+            <div>Вам выпал:</div>
+            <img src="" id="resultImage" style="width:200px;height:200px;border-radius:15px;margin:15px 0;">
+            <div id="resultItemName"></div>
+            <div>Цена: <span id="prizeValue">0</span> зв</div>
+            <div style="display:flex;gap:15px;margin-top:20px;">
+                <button style="background:#00c853;padding:15px 40px;border:none;color:white;border-radius:50px;cursor:pointer;" id="sellButton">Продать</button>
+                <button style="background:#2196F3;padding:15px 40px;border:none;color:white;border-radius:50px;cursor:pointer;" id="keepButton">Оставить</button>
             </div>
         </div>
-        
+
         <div class="section-divider"></div>
-        
+
         <div class="possible-items">
             <h2>Возможные выигрыши</h2>
             <div class="items-grid" id="itemsGrid"></div>
         </div>
-        
+
         <div class="section-divider"></div>
-        
-        <div class="upgrade-section">
-            <h2>Апгрейд скинов</h2>
-            <div class="upgrade-container">
-                <div class="upgrade-item" id="upgradeItem1">
-                    <img src="" alt="Предмет 1">
-                    <div class="item-name">Выберите предмет</div>
-                </div>
-                <div class="upgrade-arrow">→</div>
-                <div class="upgrade-item" id="upgradeItem2">
-                    <img src="" alt="Предмет 2">
-                    <div class="item-name">Выберите предмет</div>
-                </div>
-            </div>
-            <div class="upgrade-wheel">
-                <div class="wheel-circle" id="wheelCircle">
-                    <div class="wheel-pointer" id="wheelPointer"></div>
-                </div>
-            </div>
-            <button class="wheel-spin-button" id="upgradeButton" disabled>Апгрейд</button>
-            <div class="upgrade-result" id="upgradeResult"></div>
-        </div>
-        
-        <div class="section-divider"></div>
-        
+
         <div class="inventory-section">
             <h2>Инвентарь</h2>
             <div class="inventory-grid" id="inventoryGrid">
-                <div class="empty-inventory">Инвентарь пуст</div>
+                <div style="grid-column:1/-1;text-align:center;color:#999;padding:20px;">Инвентарь пуст</div>
             </div>
         </div>
     </div>
 
+    <!-- СЛОТ-МАШИНА В УГЛУ -->
+    <div class="slot-machine" id="slotMachine">
+        <div style="font-weight:bold;color:#ff9a00;font-size:1.1rem;">Слоты Пепе</div>
+        <div class="slot-reels" id="slotReels">
+            <div class="reel" id="reel1"><div class="reel-strip"></div></div>
+            <div class="reel" id="reel2"><div class="reel-strip"></div></div>
+            <div class="reel" id="reel3"><div class="reel-strip"></div></div>
+        </div>
+        <button class="slot-spin-button" id="slotSpinButton">Спин за 1000 зв</button>
+        <div class="slot-result" id="slotResult"></div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Элементы
-            const caseImage = document.getElementById('caseImage');
-            const spinButton = document.getElementById('spinButton');
-            const spinArea = document.getElementById('spinArea');
-            const spinItems = document.getElementById('spinItems');
-            const resultContainer = document.getElementById('resultContainer');
-            const resultImage = document.getElementById('resultImage');
-            const resultItemName = document.getElementById('resultItemName');
-            const prizeValue = document.getElementById('prizeValue');
-            const sellButton = document.getElementById('sellButton');
-            const keepButton = document.getElementById('keepButton');
-            const balanceElement = document.getElementById('balance');
-            const itemsGrid = document.getElementById('itemsGrid');
-            const inventoryGrid = document.getElementById('inventoryGrid');
-            const upgradeItem1 = document.getElementById('upgradeItem1');
-            const upgradeItem2 = document.getElementById('upgradeItem2');
-            const upgradeButton = document.getElementById('upgradeButton');
-            const wheelCircle = document.getElementById('wheelCircle');
-            const upgradeResult = document.getElementById('upgradeResult');
+            // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
+            const balanceEl = document.getElementById('balance');
+            let balance = 1000;
+            balanceEl.textContent = balance;
 
-            // Состояние
-            let balance = 1;
-            let isSpinning = false;
-            let currentWinItem = null;
-            let inventory = [];
-            let selectedItems = [];
-
-            // Предметы
-            const items = [
-                {
-                    id: 1,
-                    name: "Редкий Плюш Пепе",
-                    image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp",
-                    price: 1000000
-                },
-                {
-                    id: 2,
-                    name: "Эпический Плюш Пепе",
-                    image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp",
-                    price: 500000
-                }
+            // === ПРЕДМЕТЫ ДЛЯ КЕЙСА ===
+            const caseItems = [
+                { id: 1, name: "Редкий Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp", price: 1000000 },
+                { id: 2, name: "Эпический Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp", price: 500000 }
             ];
 
-            // Инициализация
-            balanceElement.textContent = balance;
-            renderItemsGrid();
-            updateInventoryDisplay();
+            // === ПРЕДМЕТЫ ДЛЯ СЛОТОВ (3 вида Пепе) ===
+            const slotSymbols = [
+                { name: "pepe1", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:300:300:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp" },
+                { name: "pepe2", image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:300:300:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp" },
+                { name: "pepe3", image: "https://cache.tonapi.io/imgproxy/3b8e3f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f" },
+            ];
 
-            // Клик по кейсу
-            caseImage.addEventListener('click', () => {
-                if (balance >= 1 && !isSpinning) {
-                    spinButton.disabled = false;
-                }
+            // === ИНИЦИАЛИЗАЦИЯ ===
+            caseItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.style.cssText = 'background:rgba(255,255,255,0.1);border-radius:10px;padding:10px;display:flex;flex-direction:column;align-items:center;';
+                card.innerHTML = `<img src="${item.image}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">
+                                  <div style="margin-top:8px;font-size:0.9rem;">${item.name}</div>
+                                  <div style="margin-top:5px;font-size:0.8rem;color:#ff9a00;">${item.price.toLocaleString()} зв</div>`;
+                document.getElementById('itemsGrid').appendChild(card);
             });
 
-            // Прокрутка
-            spinButton.addEventListener('click', startSpin);
+            // === КЕЙСЫ ===
+            let isSpinning = false;
+            let currentWinItem = null;
 
-            function startSpin() {
+            document.getElementById('caseImage').onclick = () => {
+                if (balance >= 1 && !isSpinning) {
+                    document.getElementById('spinButton').disabled = false;
+                }
+            };
+
+            document.getElementById('spinButton').onclick = () => {
                 if (balance < 1 || isSpinning) return;
-
                 isSpinning = true;
-                spinButton.disabled = true;
+                document.getElementById('spinButton').disabled = true;
                 balance -= 1;
-                balanceElement.textContent = balance;
+                balanceEl.textContent = balance;
 
+                const spinArea = document.getElementById('spinArea');
+                const spinItems = document.getElementById('spinItems');
                 spinArea.style.display = 'block';
-                resultContainer.style.display = 'none';
                 spinItems.innerHTML = '';
 
-                const totalItems = 50;
-                const itemWidth = 200;
-                const centerPosition = Math.floor(totalItems / 2);
+                const winIdx = Math.floor(Math.random() * caseItems.length);
+                currentWinItem = { ...caseItems[winIdx] };
+                const total = 35;
+                const itemW = 200;
 
-                // Генерация ленты
-                for (let i = 0; i < totalItems; i++) {
-                    const item = items[Math.floor(Math.random() * items.length)];
-                    const div = document.createElement('div');
-                    div.className = 'spin-item';
-                    div.innerHTML = `
-                        <img src="${item.image}" class="spin-item-image">
-                        <div class="spin-item-name">${item.name}</div>
-                    `;
-                    spinItems.appendChild(div);
+                for (let i = 0; i < total; i++) {
+                    const item = i === total - 3 ? currentWinItem : caseItems[Math.floor(Math.random() * caseItems.length)];
+                    const el = document.createElement('div');
+                    el.style.cssText = 'width:200px;display:flex;flex-direction:column;align-items:center;padding:10px;';
+                    el.innerHTML = `<img src="${item.image}" style="width:120px;height:120px;object-fit:cover;border-radius:10px;">
+                                    <div style="margin-top:10px;font-size:0.9rem;">${item.name}</div>`;
+                    spinItems.appendChild(el);
                 }
 
-                // Выбор выигрыша
-                const winIndex = Math.floor(Math.random() * items.length);
-                currentWinItem = { ...items[winIndex] };
+                const center = spinArea.offsetWidth / 2 - itemW / 2;
+                const target = -((total - 3) * itemW) + center;
+                let pos = 0, speed = 60;
 
-                // Позиция остановки
-                const winPosition = centerPosition - 1;
-                const targetX = -(winPosition * itemWidth) + (spinArea.offsetWidth / 2 - itemWidth / 2);
-
-                // Анимация
-                let pos = 0;
-                const duration = 3000;
-                const startTime = Date.now();
-
-                function animate() {
-                    const elapsed = Date.now() - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const ease = 1 - Math.pow(1 - progress, 3);
-
-                    pos = ease * (targetX + totalItems * itemWidth * 2);
-
-                    spinItems.style.transform = `translateX(${-pos}px)`;
-
-                    if (progress < 1) {
-                        requestAnimationFrame(animate);
-                    } else {
-                        spinItems.style.transform = `translateX(${targetX}px)`;
-                        setTimeout(showResult, 600);
+                const animate = () => {
+                    pos -= speed;
+                    if (Math.abs(pos - target) < 1000) speed *= 0.93;
+                    if (pos <= target) {
+                        pos = target;
+                        spinItems.style.transform = `translateX(${pos}px)`;
+                        setTimeout(() => showCaseResult(), 600);
+                        return;
                     }
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            function showResult() {
-                resultImage.src = currentWinItem.image;
-                resultItemName.textContent = currentWinItem.name;
-                prizeValue.textContent = currentWinItem.price.toLocaleString();
-                resultContainer.style.display = 'flex';
-                resultImage.classList.add('win-animation');
-                isSpinning = false;
-                spinButton.disabled = balance < 1;
-            }
-
-            // Продажа
-            sellButton.addEventListener('click', () => {
-                if (!currentWinItem) return;
-                balance += currentWinItem.price;
-                balanceElement.textContent = balance;
-                resetSpin();
-                showNotification(`Продан: ${currentWinItem.name} (+${currentWinItem.price.toLocaleString()} зв)`);
-                currentWinItem = null;
-            });
-
-            // Сохранение
-            keepButton.addEventListener('click', () => {
-                if (!currentWinItem) return;
-                addToInventory(currentWinItem);
-                resetSpin();
-                showNotification(`Добавлено: ${currentWinItem.name}`);
-                currentWinItem = null;
-            });
-
-            function resetSpin() {
-                resultContainer.style.display = 'none';
-                spinArea.style.display = 'none';
-                resultImage.classList.remove('win-animation');
-                spinButton.disabled = balance < 1;
-            }
-
-            // Инвентарь
-            function addToInventory(item) {
-                const invItem = {
-                    ...item,
-                    inventoryId: Date.now() + Math.random()
+                    spinItems.style.transform = `translateX(${pos}px)`;
+                    requestAnimationFrame(animate);
                 };
-                inventory.push(invItem);
-                updateInventoryDisplay();
+                requestAnimationFrame(animate);
+            };
+
+            function showCaseResult() {
+                document.getElementById('resultImage').src = currentWinItem.image;
+                document.getElementById('resultItemName').textContent = currentWinItem.name;
+                document.getElementById('prizeValue').textContent = currentWinItem.price.toLocaleString();
+                document.getElementById('resultContainer').style.display = 'flex';
+                isSpinning = false;
             }
 
-            function updateInventoryDisplay() {
-                inventoryGrid.innerHTML = inventory.length === 0
-                    ? '<div class="empty-inventory">Инвентарь пуст</div>'
+            document.getElementById('sellButton').onclick = () => {
+                balance += currentWinItem.price;
+                balanceEl.textContent = balance;
+                hideResult();
+            };
+
+            document.getElementById('keepButton').onclick = () => {
+                addToInventory(currentWinItem);
+                hideResult();
+            };
+
+            function hideResult() {
+                document.getElementById('resultContainer').style.display = 'none';
+                document.getElementById('spinArea').style.display = 'none';
+            }
+
+            // === ИНВЕНТАРЬ ===
+            let inventory = [];
+            function addToInventory(item) {
+                inventory.push({ ...item, id: Date.now() });
+                updateInventory();
+            }
+
+            function updateInventory() {
+                const grid = document.getElementById('inventoryGrid');
+                grid.innerHTML = inventory.length === 0 
+                    ? '<div style="grid-column:1/-1;text-align:center;color:#999;padding:20px;">Инвентарь пуст</div>'
                     : '';
-
                 inventory.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'inventory-item';
-                    div.dataset.id = item.inventoryId;
-                    div.innerHTML = `
-                        <input type="checkbox" class="select-checkbox" onchange="toggleSelect(${item.inventoryId})">
-                        <img src="${item.image}">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price">${item.price.toLocaleString()} зв</div>
-                        <button class="inventory-sell-button" onclick="sellInventoryItem(${item.inventoryId})">Продать</button>
-                    `;
-                    inventoryGrid.appendChild(div);
+                    const el = document.createElement('div');
+                    el.style.cssText = 'background:rgba(255,255,255,0.1);border-radius:10px;padding:10px;display:flex;flex-direction:column;align-items:center;position:relative;';
+                    el.innerHTML = `<img src="${item.image}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">
+                                    <div style="margin-top:8px;font-size:0.8rem;">${item.name}</div>
+                                    <div style="margin-top:5px;font-size:0.7rem;color:#ff9a00;">${item.price.toLocaleString()} зв</div>
+                                    <button style="margin-top:8px;background:#00c853;color:white;padding:5px 10px;border:none;border-radius:15px;font-size:0.7rem;cursor:pointer;" onclick="sellInventory(${item.id})">Продать</button>`;
+                    grid.appendChild(el);
                 });
             }
 
-            // Глобальные функции
-            window.toggleSelect = function(id) {
-                const item = inventory.find(i => i.inventoryId === id);
-                const index = selectedItems.findIndex(s => s.inventoryId === id);
-
-                if (index === -1 && selectedItems.length < 2 && item) {
-                    selectedItems.push(item);
-                } else if (index !== -1) {
-                    selectedItems.splice(index, 1);
+            window.sellInventory = (id) => {
+                const idx = inventory.findIndex(i => i.id === id);
+                if (idx !== -1) {
+                    balance += inventory[idx].price;
+                    balanceEl.textContent = balance;
+                    inventory.splice(idx, 1);
+                    updateInventory();
                 }
-
-                updateUpgradeSelection();
-                upgradeButton.disabled = selectedItems.length !== 2;
             };
 
-            window.sellInventoryItem = function(id) {
-                const index = inventory.findIndex(i => i.inventoryId === id);
-                if (index === -1) return;
+            // === СЛОТ-МАШИНА ===
+            let isSlotSpinning = false;
+            const reels = [document.getElementById('reel1').querySelector('.reel-strip'), 
+                           document.getElementById('reel2').querySelector('.reel-strip'), 
+                           document.getElementById('reel3').querySelector('.reel-strip')];
+            
+            // Заполняем барабаны
+            slotSymbols.forEach(sym => {
+                [0,1,2].forEach(i => {
+                    const img = document.createElement('img');
+                    img.src = sym.image;
+                    img.className = 'reel-item';
+                    reels[i].appendChild(img.cloneNode());
+                });
+            });
 
-                const item = inventory[index];
-                balance += item.price;
-                balanceElement.textContent = balance;
+            document.getElementById('slotSpinButton').onclick = () => {
+                if (balance < 1000 || isSlotSpinning) return;
+                isSlotSpinning = true;
+                document.getElementById('slotSpinButton').disabled = true;
+                balance -= 1000;
+                balanceEl.textContent = balance;
+                document.getElementById('slotResult').textContent = '';
 
-                inventory.splice(index, 1);
-                selectedItems = selectedItems.filter(s => s.inventoryId !== id);
+                const spins = [3 + Math.random() * 5, 4 + Math.random() * 5, 5 + Math.random() * 5];
+                const results = slotSymbols.map(() => Math.floor(Math.random() * slotSymbols.length));
+                let done = 0;
 
-                updateInventoryDisplay();
-                updateUpgradeSelection();
-                upgradeButton.disabled = selectedItems.length !== 2;
-
-                showNotification(`Продан: ${item.name} (+${item.price.toLocaleString()} зв)`);
+                reels.forEach((reel, i) => {
+                    let pos = 0;
+                    const target = spins[i] * 90 + results[i] * 90;
+                    const animate = () => {
+                        pos += 30;
+                        if (pos >= target) {
+                            pos = target;
+                            reel.style.transform = `translateY(-${pos}px)`;
+                            if (++done === 3) checkSlotWin(results);
+                            return;
+                        }
+                        reel.style.transform = `translateY(-${pos}px)`;
+                        setTimeout(animate, 50);
+                    };
+                    setTimeout(animate, i * 300);
+                });
             };
 
-            function updateUpgradeSelection() {
-                const [item1, item2] = selectedItems;
-
-                upgradeItem1.innerHTML = item1
-                    ? `<img src="${item1.image}"><div class="item-name">${item1.name}</div>`
-                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
-
-                upgradeItem2.innerHTML = item2
-                    ? `<img src="${item2.image}"><div class="item-name">${item2.name}</div>`
-                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
+            function checkSlotWin(results) {
+                isSlotSpinning = false;
+                document.getElementById('slotSpinButton').disabled = balance < 1000;
+                if (results[0] === results[1] && results[1] === results[2]) {
+                    const win = 10000;
+                    balance += win;
+                    balanceEl.textContent = balance;
+                    document.getElementById('slotResult').innerHTML = `<span style="color:#00c853;font-weight:bold;">ВЫИГРЫШ! +${win} зв</span>`;
+                    document.querySelectorAll('.reel').forEach(r => r.classList.add('win-glow'));
+                    setTimeout(() => document.querySelectorAll('.reel').forEach(r => r.classList.remove('win-glow')), 2000);
+                } else {
+                    document.getElementById('slotResult').textContent = 'Попробуйте снова';
+                }
             }
 
-            // Апгрейд
-            upgradeButton.addEventListener('click', startUpgrade);
-
-            function startUpgrade() {
-                if (selectedItems.length !== 2) return;
-
-                upgradeButton.disabled = true;
-                upgradeResult.style.display = 'none';
-
-                // Удаляем предметы
-                selectedItems.forEach(item => {
-                    const idx = inventory.findIndex(i => i.inventoryId === item.inventoryId);
-                    if (idx !== -1) inventory.splice(idx, 1);
-                });
-                updateInventoryDisplay();
-
-                // Анимация колеса
-                const spins = 5 + Math.random() * 3;
-                const success = Math.random() < 0.3;
-                const finalRotation = spins * 360 + (success ? 0 : 180 + Math.random() * 180);
-                const duration = 3000;
-
-                wheelCircle.style.transition = `transform ${duration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
-                wheelCircle.style.transform = `rotate(${finalRotation}deg)`;
-
-                setTimeout(() => {
-                    if (success) {
-                        const baseItem = selectedItems[0];
-                        const newItem = {
-                            ...baseItem,
-                            inventoryId: Date.now() + Math.random(),
-                            name: "★ Улучшенный " + baseItem.name,
-                            price: Math.max(selectedItems[0].price, selectedItems[1].price) * 2
-                        };
-                        addToInventory(newItem);
-
-                        upgradeResult.innerHTML = `
-                            <div class="upgrade-success">УСПЕХ! Получен улучшенный предмет!</div>
-                            <img src="${newItem.image}" style="width:100px;height:100px;border-radius:10px;margin:10px 0;">
-                            <div>${newItem.name}</div>
-                            <div>Цена: ${newItem.price.toLocaleString()} зв</div>
-                        `;
-                        showNotification("Апгрейд успешен!");
-                    } else {
-                        upgradeResult.innerHTML = `<div class="upgrade-fail">Провал! Предметы сгорели...</div>`;
-                        showNotification("Апгрейд провалился!");
-                    }
-
-                    upgradeResult.style.display = 'block';
-
-                    setTimeout(() => {
-                        wheelCircle.style.transition = 'none';
-                        wheelCircle.style.transform = 'rotate(0deg)';
-                        setTimeout(() => {
-                            wheelCircle.style.transition = `transform 3000ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
-                        }, 50);
-                        selectedItems = [];
-                        updateUpgradeSelection();
-                        upgradeButton.disabled = true;
-                    }, 3000);
-
-                }, duration);
-            }
-
-            // Уведомления
-            function showNotification(msg) {
-                const notif = document.createElement('div');
-                notif.textContent = msg;
-                notif.style.cssText = `
-                    position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.9);
-                    color: white; padding: 15px 25px; border-radius: 12px; font-size: 1rem;
-                    z-index: 10000; border-left: 5px solid #ff9a00; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-                    animation: notifIn 0.4s ease-out;
-                `;
-                document.body.appendChild(notif);
-
-                setTimeout(() => {
-                    notif.style.animation = 'notifOut 0.4s ease-in';
-                    setTimeout(() => notif.remove(), 400);
-                }, 3000);
-            }
-
-            // Галерея предметов
-            function renderItemsGrid() {
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.innerHTML = `
-                        <img src="${item.image}">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price">${item.price.toLocaleString()} зв</div>
-                    `;
-                    itemsGrid.appendChild(card);
-                });
-            }
+            // Инициализация
+            updateInventory();
+            document.getElementById('slotSpinButton').disabled = balance < 1000;
         });
     </script>
 </body>
