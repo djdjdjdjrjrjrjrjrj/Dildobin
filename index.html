@@ -25,7 +25,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -53,7 +53,7 @@
         .cases-row {
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 30px;
             flex-wrap: wrap;
             width: 100%;
             margin-bottom: 30px;
@@ -64,6 +64,7 @@
             flex-direction: column;
             align-items: center;
             max-width: 320px;
+            position: relative;
         }
         
         .case-image {
@@ -74,9 +75,15 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
             cursor: pointer;
             transition: transform 0.3s;
+            filter: brightness(0.7);
         }
         
-        .case-image:hover {
+        .case-image.unlocked {
+            filter: brightness(1);
+            cursor: pointer;
+        }
+        
+        .case-image:hover.unlocked {
             transform: scale(1.05);
         }
         
@@ -109,6 +116,67 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+        
+        .promo-input-container {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .promo-input {
+            padding: 10px 15px;
+            border: 2px solid #ff9a00;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1rem;
+            width: 180px;
+        }
+        
+        .promo-button {
+            background: linear-gradient(45deg, #9c27b0, #e91e63);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .promo-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .promo-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            font-size: 1.2rem;
+            color: #ff9a00;
+            text-shadow: 0 0 10px #ff9a00;
+        }
+        
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
         
         .spin-area {
@@ -246,7 +314,7 @@
         }
         
         .item-card {
-            background: rgba(255, 255, 255, 0.1);
+            background:: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 10px;
             display: flex;
@@ -301,7 +369,6 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0); }
         }
         
-        /* Апгрейд */
         .upgrade-section {
             width: 100%;
             margin-top: 40px;
@@ -398,7 +465,7 @@
         }
         
         .wheel-spin-button:disabled {
-            background: #666;
+            background1: #666;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -411,7 +478,6 @@
             display: none;
         }
         
-        /* Инвентарь */
         .inventory-section {
             width: 100%;
             margin-top: 40px;
@@ -468,12 +534,6 @@
             color: #ff9a00;
         }
         
-        .inventory-item-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 8px;
-        }
-        
         .inventory-sell-button {
             background: linear-gradient(45deg, #00c853, #00e676);
             border: none;
@@ -483,6 +543,7 @@
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
+            margin-top: 8px;
         }
         
         .inventory-sell-button:hover {
@@ -527,11 +588,11 @@
             Баланс: <span id="balance">10</span> зв
         </div>
         
-        <!-- Два кейса: TON (слева) и Peppers (справа) -->
+        <!-- Три кейса -->
         <div class="cases-row">
             <!-- Кейс TON -->
             <div class="case-block" id="tonCaseBlock">
-                <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="Кейс TON" class="case-image" id="tonCaseImage">
+                <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="Кейс TON" class="case-image unlocked" id="tonCaseImage">
                 <div class="case-info">
                     Кейс TON<br>
                     Цена: 5 зв
@@ -541,12 +602,30 @@
 
             <!-- Кейс Peppers -->
             <div class="case-block" id="peppersCaseBlock">
-                <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Кейс" class="case-image" id="peppersCaseImage">
+                <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Кейс Peppers" class="case-image unlocked" id="peppersCaseImage">
                 <div class="case-info">
                     Кейс Plotnikov Peppers<br>
                     Цена: 1 зв
                 </div>
                 <button class="spin-button" id="peppersSpinButton" disabled>Крутить за 1 зв</button>
+            </div>
+
+            <!-- Кейс Промо -->
+            <div class="case-block" id="promoCaseBlock">
+                <div class="lock-overlay" id="promoLock">
+                    <div class="lock-icon">Замок</div>
+                    <div>Требуется промокод</div>
+                </div>
+                <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200" alt="Кейс Промо" class="case-image" id="promoCaseImage">
+                <div class="case-info">
+                    Кейс Промо<br>
+                    <span style="font-size: 1rem; color: #00e676;">Бесплатно по промокоду</span>
+                </div>
+                <div class="promo-input-container">
+                    <input type="text" class="promo-input" id="promoInput" placeholder="Введите промокод">
+                    <button class="promo-button" id="promoActivate">Активировать</button>
+                </div>
+                <button class="spin-button" id="promoSpinButton" disabled style="display: none;">Крутить бесплатно</button>
             </div>
         </div>
         
@@ -573,16 +652,18 @@
         
         <div class="possible-items">
             <h2>Возможные выигрыши</h2>
-            <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
-                <!-- TON Items -->
+            <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
                 <div>
-                    <h3 style="text-align: center; color: #00c853; margin-bottom: 10px;">Кейс TON</h3>
+                    <h3 style="text-align: center; color: #00c853;">Кейс TON</h3>
                     <div class="items-grid" id="tonItemsGrid"></div>
                 </div>
-                <!-- Peppers Items -->
                 <div>
-                    <h3 style="text-align: center; color: #ff9a00; margin-bottom: 10px;">Кейс Peppers</h3>
+                    <h3 style="text-align: center; color: #ff9a00;">Кейс Peppers</h3>
                     <div class="items-grid" id="peppersItemsGrid"></div>
+                </div>
+                <div>
+                    <h3 style="text-align: center; color: #e91e63;">Кейс Промо</h3>
+                    <div class="items-grid" id="promoItemsGrid"></div>
                 </div>
             </div>
         </div>
@@ -629,6 +710,11 @@
             const tonSpinButton = document.getElementById('tonSpinButton');
             const peppersCaseImage = document.getElementById('peppersCaseImage');
             const peppersSpinButton = document.getElementById('peppersSpinButton');
+            const promoCaseImage = document.getElementById('promoCaseImage');
+            const promoSpinButton = document.getElementById('promoSpinButton');
+            const promoInput = document.getElementById('promoInput');
+            const promoActivate = document.getElementById('promoActivate');
+            const promoLock = document.getElementById('promoLock');
             const spinArea = document.getElementById('spinArea');
             const spinItems = document.getElementById('spinItems');
             const resultContainer = document.getElementById('resultContainer');
@@ -639,6 +725,7 @@
             const keepButton = document.getElementById('keepButton');
             const tonItemsGrid = document.getElementById('tonItemsGrid');
             const peppersItemsGrid = document.getElementById('peppersItemsGrid');
+            const promoItemsGrid = document.getElementById('promoItemsGrid');
             const inventoryGrid = document.getElementById('inventoryGrid');
             const upgradeItem1 = document.getElementById('upgradeItem1');
             const upgradeItem2 = document.getElementById('upgradeItem2');
@@ -652,74 +739,91 @@
             let currentWinItem = null;
             let inventory = [];
             let selectedItems = [];
-            let currentCase = null; // 'ton' или 'peppers'
+            let currentCase = null;
+            let promoUnlocked = false;
 
-            // Предметы для кейсов
+            const PROMO_CODE = "PLOTNIKOV";
+
+            // Предметы
             const tonItems = [
-                {
-                    id: 101,
-                    name: "NFT Павел Дуров",
-                    image: "https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg",
-                    price: 2500000
-                },
-                {
-                    id: 102,
-                    name: "TON Кристалл",
-                    image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvdG9uLWNyeXN0YWwtMTAxLndlYnA.webp",
-                    price: 1800000
-                }
+                { id: 101, name: "NFT Павел Дуров", image: "https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg", price: 2500000 },
+                { id: 102, name: "TON Кристалл", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvdG9uLWNyeXN0YWwtMTAxLndlYnA.webp", price: 1800000 }
             ];
 
             const peppersItems = [
-                {
-                    id: 1,
-                    name: "Редкий Плюш Пепе",
-                    image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp",
-                    price: 1000000
-                },
-                {
-                    id: 2,
-                    name: "Эпический Плюш Пепе",
-                    image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp",
-                    price: 500000
-                }
+                { id: 1, name: "Редкий Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp", price: 1000000 },
+                { id: 2, name: "Эпический Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp", price: 500000 }
+            ];
+
+            const promoItems = [
+                { id: 201, name: "Подарок: Сердце", image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200", price: 500000 },
+                { id: 202, name: "Подарок: Цветы", image: "https://i.pinimg.com/736x/8a/9e/8b/8a9e8b9f8e9d8a7b6c5d4e3f2g1h0i9j.jpg", price: 300000 },
+                { id: 203, name: "Подарок: Мишка", image: "https://example.com/bear.jpg", price: 400000 }
             ];
 
             // Инициализация
             balanceElement.textContent = balance;
             renderItemsGrid(tonItems, tonItemsGrid);
             renderItemsGrid(peppersItems, peppersItemsGrid);
+            renderItemsGrid(promoItems, promoItemsGrid);
             updateInventoryDisplay();
 
-            // Активация кнопки при клике на кейс
+            // Активация кейсов
             tonCaseImage.addEventListener('click', () => {
                 if (balance >= 5 && !isSpinning) {
+                    disableAllSpinButtons();
                     tonSpinButton.disabled = false;
-                    peppersSpinButton.disabled = true;
                     currentCase = 'ton';
                 }
             });
 
             peppersCaseImage.addEventListener('click', () => {
                 if (balance >= 1 && !isSpinning) {
+                    disableAllSpinButtons();
                     peppersSpinButton.disabled = false;
-                    tonSpinButton.disabled = true;
                     currentCase = 'peppers';
                 }
             });
 
-            // Прокрутка
+            promoCaseImage.addEventListener('click', () => {
+                if (promoUnlocked && !isSpinning) {
+                    disableAllSpinButtons();
+                    promoSpinButton.disabled = false;
+                    currentCase = 'promo';
+                }
+            });
+
+            // Промокод
+            promoActivate.addEventListener('click', () => {
+                const code = promoInput.value.trim().toUpperCase();
+                if (code === PROMO_CODE) {
+                    promoUnlocked = true;
+                    promoLock.style.display = 'none';
+                    promoCaseImage.classList.add('unlocked');
+                    promoSpinButton.style.display = 'block';
+                    promoInput.disabled = true;
+                    promoActivate.disabled = true;
+                    promoInput.value = '';
+                    showNotification("Промокод активирован! Кейс разблокирован!");
+                } else {
+                    showNotification("Неверный промокод!");
+                }
+            });
+
+            // Спин
             tonSpinButton.addEventListener('click', () => startSpin(5, tonItems));
             peppersSpinButton.addEventListener('click', () => startSpin(1, peppersItems));
+            promoSpinButton.addEventListener('click', () => startSpin(0, promoItems));
 
             function startSpin(cost, itemsList) {
-                if (balance < cost || isSpinning) return;
+                if ((cost > 0 && balance < cost) || isSpinning || (currentCase === 'promo' && !promoUnlocked)) return;
 
                 isSpinning = true;
-                tonSpinButton.disabled = true;
-                peppersSpinButton.disabled = true;
-                balance -= cost;
-                balanceElement.textContent = balance;
+                disableAllSpinButtons();
+                if (cost > 0) {
+                    balance -= cost;
+                    balanceElement.textContent = balance;
+                }
 
                 spinArea.style.display = 'block';
                 resultContainer.style.display = 'none';
@@ -729,27 +833,20 @@
                 const itemWidth = 200;
                 const centerPosition = Math.floor(totalItems / 2);
 
-                // Генерация ленты
                 for (let i = 0; i < totalItems; i++) {
                     const item = itemsList[Math.floor(Math.random() * itemsList.length)];
                     const div = document.createElement('div');
                     div.className = 'spin-item';
-                    div.innerHTML = `
-                        <img src="${item.image}" class="spin-item-image">
-                        <div class="spin-item-name">${item.name}</div>
-                    `;
+                    div.innerHTML = `<img src="${item.image}" class="spin-item-image"><div class="spin-item-name">${item.name}</div>`;
                     spinItems.appendChild(div);
                 }
 
-                // Выбор выигрыша
                 const winIndex = Math.floor(Math.random() * itemsList.length);
                 currentWinItem = { ...itemsList[winIndex] };
 
-                // Позиция остановки
                 const winPosition = centerPosition - 1;
                 const targetX = -(winPosition * itemWidth) + (spinArea.offsetWidth / 2 - itemWidth / 2);
 
-                // Анимация
                 let pos = 0;
                 const duration = 3000;
                 const startTime = Date.now();
@@ -758,19 +855,14 @@
                     const elapsed = Date.now() - startTime;
                     const progress = Math.min(elapsed / duration, 1);
                     const ease = 1 - Math.pow(1 - progress, 3);
-
                     pos = ease * (targetX + totalItems * itemWidth * 2);
-
                     spinItems.style.transform = `translateX(${-pos}px)`;
-
-                    if (progress < 1) {
-                        requestAnimationFrame(animate);
-                    } else {
+                    if (progress < 1) requestAnimationFrame(animate);
+                    else {
                         spinItems.style.transform = `translateX(${targetX}px)`;
                         setTimeout(showResult, 600);
                     }
                 }
-
                 requestAnimationFrame(animate);
             }
 
@@ -781,11 +873,21 @@
                 resultContainer.style.display = 'flex';
                 resultImage.classList.add('win-animation');
                 isSpinning = false;
-                tonSpinButton.disabled = balance < 5;
-                peppersSpinButton.disabled = balance < 1;
+                updateSpinButtons();
             }
 
-            // Продажа и сохранение
+            function updateSpinButtons() {
+                tonSpinButton.disabled = balance < 5;
+                peppersSpinButton.disabled = balance < 1;
+                promoSpinButton.disabled = !promoUnlocked;
+            }
+
+            function disableAllSpinButtons() {
+                tonSpinButton.disabled = true;
+                peppersSpinButton.disabled = true;
+                promoSpinButton.disabled = true;
+            }
+
             sellButton.addEventListener('click', () => {
                 if (!currentWinItem) return;
                 balance += currentWinItem.price;
@@ -807,25 +909,17 @@
                 resultContainer.style.display = 'none';
                 spinArea.style.display = 'none';
                 resultImage.classList.remove('win-animation');
-                tonSpinButton.disabled = balance < 5;
-                peppersSpinButton.disabled = balance < 1;
+                updateSpinButtons();
             }
 
-            // Инвентарь
             function addToInventory(item) {
-                const invItem = {
-                    ...item,
-                    inventoryId: Date.now() + Math.random()
-                };
+                const invItem = { ...item, inventoryId: Date.now() + Math.random() };
                 inventory.push(invItem);
                 updateInventoryDisplay();
             }
 
             function updateInventoryDisplay() {
-                inventoryGrid.innerHTML = inventory.length === 0
-                    ? '<div class="empty-inventory">Инвентарь пуст</div>'
-                    : '';
-
+                inventoryGrid.innerHTML = inventory.length === 0 ? '<div class="empty-inventory">Инвентарь пуст</div>' : '';
                 inventory.forEach(item => {
                     const div = document.createElement('div');
                     div.className = 'inventory-item';
@@ -844,13 +938,8 @@
             window.toggleSelect = function(id) {
                 const item = inventory.find(i => i.inventoryId === id);
                 const index = selectedItems.findIndex(s => s.inventoryId === id);
-
-                if (index === -1 && selectedItems.length < 2 && item) {
-                    selectedItems.push(item);
-                } else if (index !== -1) {
-                    selectedItems.splice(index, 1);
-                }
-
+                if (index === -1 && selectedItems.length < 2 && item) selectedItems.push(item);
+                else if (index !== -1) selectedItems.splice(index, 1);
                 updateUpgradeSelection();
                 upgradeButton.disabled = selectedItems.length !== 2;
             };
@@ -858,42 +947,29 @@
             window.sellInventoryItem = function(id) {
                 const index = inventory.findIndex(i => i.inventoryId === id);
                 if (index === -1) return;
-
                 const item = inventory[index];
                 balance += item.price;
                 balanceElement.textContent = balance;
-
                 inventory.splice(index, 1);
                 selectedItems = selectedItems.filter(s => s.inventoryId !== id);
-
                 updateInventoryDisplay();
                 updateUpgradeSelection();
                 upgradeButton.disabled = selectedItems.length !== 2;
-
                 showNotification(`Продан: ${item.name} (+${item.price.toLocaleString()} зв)`);
             };
 
             function updateUpgradeSelection() {
                 const [item1, item2] = selectedItems;
-
-                upgradeItem1.innerHTML = item1
-                    ? `<img src="${item1.image}"><div class="item-name">${item1.name}</div>`
-                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
-
-                upgradeItem2.innerHTML = item2
-                    ? `<img src="${item2.image}"><div class="item-name">${item2.name}</div>`
-                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
+                upgradeItem1.innerHTML = item1 ? `<img src="${item1.image}"><div class="item-name">${item1.name}</div>` : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
+                upgradeItem2.innerHTML = item2 ? `<img src="${item2.image}"><div class="item-name">${item2.name}</div>` : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
             }
 
-            // Апгрейд
             upgradeButton.addEventListener('click', startUpgrade);
 
             function startUpgrade() {
                 if (selectedItems.length !== 2) return;
-
                 upgradeButton.disabled = true;
                 upgradeResult.style.display = 'none';
-
                 selectedItems.forEach(item => {
                     const idx = inventory.findIndex(i => i.inventoryId === item.inventoryId);
                     if (idx !== -1) inventory.splice(idx, 1);
@@ -915,66 +991,45 @@
                             ...baseItem,
                             inventoryId: Date.now() + Math.random(),
                             name: "★ Улучшенный " + baseItem.name,
-                            price: Math.max(selectedItems[0].price442, selectedItems[1].price) * 2
+                            price: Math.max(selectedItems[0].price, selectedItems[1].price) * 2
                         };
                         addToInventory(newItem);
-
-                        upgradeResult.innerHTML = `
-                            <div class="upgrade-success">УСПЕХ! Получен улучшенный предмет!</div>
+                        upgradeResult.innerHTML = `<div class="upgrade-success">УСПЕХ! Получен улучшенный предмет!</div>
                             <img src="${newItem.image}" style="width:100px;height:100px;border-radius:10px;margin:10px 0;">
-                            <div>${newItem.name}</div>
-                            <div>Цена: ${newItem.price.toLocaleString()} зв</div>
-                        `;
+                            <div>${newItem.name}</div><div>Цена: ${newItem.price.toLocaleString()} зв</div>`;
                         showNotification("Апгрейд успешен!");
                     } else {
                         upgradeResult.innerHTML = `<div class="upgrade-fail">Провал! Предметы сгорели...</div>`;
                         showNotification("Апгрейд провалился!");
                     }
-
                     upgradeResult.style.display = 'block';
-
                     setTimeout(() => {
                         wheelCircle.style.transition = 'none';
                         wheelCircle.style.transform = 'rotate(0deg)';
-                        setTimeout(() => {
-                            wheelCircle.style.transition = `transform 3000ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
-                        }, 50);
+                        setTimeout(() => wheelCircle.style.transition = `transform 3000ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`, 50);
                         selectedItems = [];
                         updateUpgradeSelection();
                         upgradeButton.disabled = true;
                     }, 3000);
-
                 }, duration);
             }
 
-            // Уведомления
             function showNotification(msg) {
                 const notif = document.createElement('div');
                 notif.textContent = msg;
-                notif.style.cssText = `
-                    position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.9);
-                    color: white; padding: 15px 25px; border-radius: 12px; font-size: 1rem;
-                    z-index: 10000; border-left: 5px solid #ff9a00; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-                    animation: notifIn 0.4s ease-out;
-                `;
+                notif.style.cssText = `position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.9); color: white; padding: 15px 25px; border-radius: 12px; font-size: 1rem; z-index: 10000; border-left: 5px solid #ff9a00; box-shadow: 0 5px 20px rgba(0,0,0,0.5); animation: notifIn 0.4s ease-out;`;
                 document.body.appendChild(notif);
-
                 setTimeout(() => {
                     notif.style.animation = 'notifOut 0.4s ease-in';
                     setTimeout(() => notif.remove(), 400);
                 }, 3000);
             }
 
-            // Галерея предметов
             function renderItemsGrid(items, grid) {
                 items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
-                    card.innerHTML = `
-                        <img src="${item.image}">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price">${item.price.toLocaleString()} зв</div>
-                    `;
+                    card.innerHTML = `<img src="${item.image}"><div class="item-name">${item.name}</div><div class="item-price">${item.price.toLocaleString()} зв</div>`;
                     grid.appendChild(card);
                 });
             }
