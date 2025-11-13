@@ -293,7 +293,7 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 154, 0, 0); }
         }
         
-        /* Стили для апгрейда */
+        /* Апгрейд */
         .upgrade-section {
             width: 100%;
             margin-top: 40px;
@@ -314,6 +314,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .upgrade-item {
@@ -321,6 +323,7 @@
             flex-direction: column;
             align-items: center;
             width: 30%;
+            min-width: 120px;
         }
         
         .upgrade-item img {
@@ -349,10 +352,10 @@
             border-radius: 50%;
             background: conic-gradient(
                 #00c853 0% 30%,
-                transparent 30% 100%
+                #ff3d00 30% 100%
             );
             position: relative;
-            transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
         
         .wheel-pointer {
@@ -375,11 +378,10 @@
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            margin: 20px auto;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
             display: block;
-            margin: 20px auto;
         }
         
         .wheel-spin-button:hover {
@@ -401,7 +403,7 @@
             display: none;
         }
         
-        /* Стили для инвентаря */
+        /* Инвентарь */
         .inventory-section {
             width: 100%;
             margin-top: 40px;
@@ -495,15 +497,8 @@
             grid-column: 1 / -1;
         }
         
-        .upgrade-success {
-            color: #00c853;
-            font-weight: bold;
-        }
-        
-        .upgrade-fail {
-            color: #ff3d00;
-            font-weight: bold;
-        }
+        .upgrade-success { color: #00c853; font-weight: bold; }
+        .upgrade-fail { color: #ff3d00; font-weight: bold; }
         
         .section-divider {
             width: 100%;
@@ -511,6 +506,9 @@
             background: linear-gradient(90deg, transparent, #ff9a00, transparent);
             margin: 30px 0;
         }
+
+        @keyframes notifIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes notifOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -593,6 +591,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Элементы
             const caseImage = document.getElementById('caseImage');
             const spinButton = document.getElementById('spinButton');
             const spinArea = document.getElementById('spinArea');
@@ -611,14 +610,15 @@
             const upgradeButton = document.getElementById('upgradeButton');
             const wheelCircle = document.getElementById('wheelCircle');
             const upgradeResult = document.getElementById('upgradeResult');
-            
+
+            // Состояние
             let balance = 1;
             let isSpinning = false;
             let currentWinItem = null;
             let inventory = [];
             let selectedItems = [];
-            
-            // Возможные предметы для выпадения
+
+            // Предметы
             const items = [
                 {
                     id: 1,
@@ -633,376 +633,289 @@
                     price: 500000
                 }
             ];
-            
-            // Заполняем галерею возможных выигрышей
-            items.forEach(item => {
-                const itemCard = document.createElement('div');
-                itemCard.className = 'item-card';
-                
-                itemCard.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-price">${item.price.toLocaleString()} зв</div>
-                `;
-                
-                itemsGrid.appendChild(itemCard);
-            });
-            
-            // При клике на кейс активируем кнопку "Крутить"
-            caseImage.addEventListener('click', function() {
+
+            // Инициализация
+            balanceElement.textContent = balance;
+            renderItemsGrid();
+            updateInventoryDisplay();
+
+            // Клик по кейсу
+            caseImage.addEventListener('click', () => {
                 if (balance >= 1 && !isSpinning) {
                     spinButton.disabled = false;
                 }
             });
-            
-            // Функция прокрутки
-            spinButton.addEventListener('click', function() {
+
+            // Прокрутка
+            spinButton.addEventListener('click', startSpin);
+
+            function startSpin() {
                 if (balance < 1 || isSpinning) return;
-                
+
                 isSpinning = true;
                 spinButton.disabled = true;
                 balance -= 1;
                 balanceElement.textContent = balance;
-                
-                // Показываем область прокрутки
+
                 spinArea.style.display = 'block';
-                
-                // Заполняем область прокрутки предметами
+                resultContainer.style.display = 'none';
                 spinItems.innerHTML = '';
-                const itemCount = 50; // Количество элементов для прокрутки
-                
-                for (let i = 0; i < itemCount; i++) {
-                    const randomItem = items[Math.floor(Math.random() * items.length)];
-                    const spinItem = document.createElement('div');
-                    spinItem.className = 'spin-item';
-                    
-                    spinItem.innerHTML = `
-                        <img src="${randomItem.image}" alt="${randomItem.name}" class="spin-item-image">
-                        <div class="spin-item-name">${randomItem.name}</div>
-                    `;
-                    
-                    spinItems.appendChild(spinItem);
-                }
-                
-                // Определяем выигрышный предмет
-                const winIndex = Math.floor(Math.random() * items.length);
-                currentWinItem = {...items[winIndex]};
-                
-                // Анимация прокрутки
-                let position = 0;
-                let speed = 50;
-                let targetPosition = 0;
-                
-                // Вычисляем позицию, на которой должен остановиться выигрышный предмет
+
+                const totalItems = 50;
                 const itemWidth = 200;
-                const centerOffset = 2; // Смещение для центрирования
-                targetPosition = -(itemCount - centerOffset - winIndex) * itemWidth;
-                
-                const spinAnimation = setInterval(() => {
-                    position -= speed;
-                    
-                    // Замедление при приближении к цели
-                    if (position <= targetPosition + 1000) {
-                        speed *= 0.95;
-                    }
-                    
-                    // Остановка анимации
-                    if (position <= targetPosition) {
-                        clearInterval(spinAnimation);
-                        position = targetPosition;
-                        
-                        // Показываем результат
-                        setTimeout(() => {
-                            resultImage.src = currentWinItem.image;
-                            resultItemName.textContent = currentWinItem.name;
-                            prizeValue.textContent = currentWinItem.price.toLocaleString();
-                            resultContainer.style.display = "flex";
-                            resultImage.classList.add("win-animation");
-                            isSpinning = false;
-                        }, 500);
-                    }
-                    
-                    spinItems.style.transform = `translateX(${position}px)`;
-                }, 20);
-            });
-            
-            // Продажа выигрыша
-            sellButton.addEventListener('click', function() {
-                if (currentWinItem) {
-                    balance += currentWinItem.price;
-                    balanceElement.textContent = balance;
-                    resultContainer.style.display = "none";
-                    spinArea.style.display = "none";
-                    spinButton.disabled = balance < 1;
-                    resultImage.classList.remove("win-animation");
-                    
-                    // Показываем уведомление о продаже
-                    showNotification(`Предмет "${currentWinItem.name}" продан за ${currentWinItem.price.toLocaleString()} зв`);
-                    
-                    currentWinItem = null;
+                const centerPosition = Math.floor(totalItems / 2);
+
+                // Генерация ленты
+                for (let i = 0; i < totalItems; i++) {
+                    const item = items[Math.floor(Math.random() * items.length)];
+                    const div = document.createElement('div');
+                    div.className = 'spin-item';
+                    div.innerHTML = `
+                        <img src="${item.image}" class="spin-item-image">
+                        <div class="spin-item-name">${item.name}</div>
+                    `;
+                    spinItems.appendChild(div);
                 }
-            });
-            
-            // Оставить в инвентаре
-            keepButton.addEventListener('click', function() {
-                if (currentWinItem) {
-                    addToInventory(currentWinItem);
-                    resultContainer.style.display = "none";
-                    spinArea.style.display = "none";
-                    spinButton.disabled = balance < 1;
-                    resultImage.classList.remove("win-animation");
-                    
-                    // Показываем уведомление о добавлении в инвентарь
-                    showNotification(`Предмет "${currentWinItem.name}" добавлен в инвентарь`);
-                    
-                    currentWinItem = null;
+
+                // Выбор выигрыша
+                const winIndex = Math.floor(Math.random() * items.length);
+                currentWinItem = { ...items[winIndex] };
+
+                // Позиция остановки
+                const winPosition = centerPosition - 1;
+                const targetX = -(winPosition * itemWidth) + (spinArea.offsetWidth / 2 - itemWidth / 2);
+
+                // Анимация
+                let pos = 0;
+                const duration = 3000;
+                const startTime = Date.now();
+
+                function animate() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+
+                    pos = ease * (targetX + totalItems * itemWidth * 2);
+
+                    spinItems.style.transform = `translateX(${-pos}px)`;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        spinItems.style.transform = `translateX(${targetX}px)`;
+                        setTimeout(showResult, 600);
+                    }
                 }
+
+                requestAnimationFrame(animate);
+            }
+
+            function showResult() {
+                resultImage.src = currentWinItem.image;
+                resultItemName.textContent = currentWinItem.name;
+                prizeValue.textContent = currentWinItem.price.toLocaleString();
+                resultContainer.style.display = 'flex';
+                resultImage.classList.add('win-animation');
+                isSpinning = false;
+                spinButton.disabled = balance < 1;
+            }
+
+            // Продажа
+            sellButton.addEventListener('click', () => {
+                if (!currentWinItem) return;
+                balance += currentWinItem.price;
+                balanceElement.textContent = balance;
+                resetSpin();
+                showNotification(`Продан: ${currentWinItem.name} (+${currentWinItem.price.toLocaleString()} зв)`);
+                currentWinItem = null;
             });
-            
-            // Функция добавления предмета в инвентарь
+
+            // Сохранение
+            keepButton.addEventListener('click', () => {
+                if (!currentWinItem) return;
+                addToInventory(currentWinItem);
+                resetSpin();
+                showNotification(`Добавлено: ${currentWinItem.name}`);
+                currentWinItem = null;
+            });
+
+            function resetSpin() {
+                resultContainer.style.display = 'none';
+                spinArea.style.display = 'none';
+                resultImage.classList.remove('win-animation');
+                spinButton.disabled = balance < 1;
+            }
+
+            // Инвентарь
             function addToInventory(item) {
-                const inventoryItem = {
+                const invItem = {
                     ...item,
                     inventoryId: Date.now() + Math.random()
                 };
-                inventory.push(inventoryItem);
+                inventory.push(invItem);
                 updateInventoryDisplay();
             }
-            
-            // Обновление отображения инвентаря
+
             function updateInventoryDisplay() {
-                inventoryGrid.innerHTML = '';
-                
-                if (inventory.length === 0) {
-                    inventoryGrid.innerHTML = '<div class="empty-inventory">Инвентарь пуст</div>';
-                    return;
-                }
-                
+                inventoryGrid.innerHTML = inventory.length === 0
+                    ? '<div class="empty-inventory">Инвентарь пуст</div>'
+                    : '';
+
                 inventory.forEach(item => {
-                    const inventoryItem = document.createElement('div');
-                    inventoryItem.className = 'inventory-item';
-                    inventoryItem.dataset.id = item.inventoryId;
-                    
-                    inventoryItem.innerHTML = `
-                        <input type="checkbox" class="select-checkbox" onchange="toggleSelectItem(${item.inventoryId})">
-                        <img src="${item.image}" alt="${item.name}">
+                    const div = document.createElement('div');
+                    div.className = 'inventory-item';
+                    div.dataset.id = item.inventoryId;
+                    div.innerHTML = `
+                        <input type="checkbox" class="select-checkbox" onchange="toggleSelect(${item.inventoryId})">
+                        <img src="${item.image}">
                         <div class="item-name">${item.name}</div>
                         <div class="item-price">${item.price.toLocaleString()} зв</div>
-                        <div class="inventory-item-actions">
-                            <button class="inventory-sell-button" onclick="sellFromInventory(${item.inventoryId})">Продать</button>
-                        </div>
+                        <button class="inventory-sell-button" onclick="sellInventoryItem(${item.inventoryId})">Продать</button>
                     `;
-                    
-                    inventoryGrid.appendChild(inventoryItem);
+                    inventoryGrid.appendChild(div);
                 });
             }
-            
-            // Функция выбора предмета для апгрейда
-            window.toggleSelectItem = function(inventoryId) {
-                const itemIndex = selectedItems.findIndex(item => item.inventoryId === inventoryId);
-                
-                if (itemIndex === -1) {
-                    // Добавляем предмет в выбранные
-                    const item = inventory.find(item => item.inventoryId === inventoryId);
-                    if (item && selectedItems.length < 2) {
-                        selectedItems.push(item);
-                    }
-                } else {
-                    // Удаляем предмет из выбранных
-                    selectedItems.splice(itemIndex, 1);
+
+            // Глобальные функции
+            window.toggleSelect = function(id) {
+                const item = inventory.find(i => i.inventoryId === id);
+                const index = selectedItems.findIndex(s => s.inventoryId === id);
+
+                if (index === -1 && selectedItems.length < 2 && item) {
+                    selectedItems.push(item);
+                } else if (index !== -1) {
+                    selectedItems.splice(index, 1);
                 }
-                
-                // Обновляем отображение выбранных предметов
+
                 updateUpgradeSelection();
-                
-                // Активируем кнопку апгрейда, если выбрано 2 предмета
                 upgradeButton.disabled = selectedItems.length !== 2;
-            }
-            
-            // Обновление отображения выбранных предметов для апгрейда
-            function updateUpgradeSelection() {
-                if (selectedItems.length >= 1) {
-                    upgradeItem1.innerHTML = `
-                        <img src="${selectedItems[0].image}" alt="${selectedItems[0].name}">
-                        <div class="item-name">${selectedItems[0].name}</div>
-                    `;
-                } else {
-                    upgradeItem1.innerHTML = `
-                        <img src="" alt="Предмет 1">
-                        <div class="item-name">Выберите предмет</div>
-                    `;
-                }
-                
-                if (selectedItems.length >= 2) {
-                    upgradeItem2.innerHTML = `
-                        <img src="${selectedItems[1].image}" alt="${selectedItems[1].name}">
-                        <div class="item-name">${selectedItems[1].name}</div>
-                    `;
-                } else {
-                    upgradeItem2.innerHTML = `
-                        <img src="" alt="Предмет 2">
-                        <div class="item-name">Выберите предмет</div>
-                    `;
-                }
-            }
-            
-            // Продажа предмета из инвентаря
-            window.sellFromInventory = function(inventoryId) {
-                const itemIndex = inventory.findIndex(item => item.inventoryId === inventoryId);
-                if (itemIndex !== -1) {
-                    const item = inventory[itemIndex];
-                    balance += item.price;
-                    balanceElement.textContent = balance;
-                    
-                    // Удаляем из выбранных, если предмет был выбран
-                    const selectedIndex = selectedItems.findIndex(selected => selected.inventoryId === inventoryId);
-                    if (selectedIndex !== -1) {
-                        selectedItems.splice(selectedIndex, 1);
-                        updateUpgradeSelection();
-                        upgradeButton.disabled = selectedItems.length !== 2;
-                    }
-                    
-                    // Удаляем из инвентаря
-                    inventory.splice(itemIndex, 1);
-                    updateInventoryDisplay();
-                    
-                    // Показываем уведомление
-                    showNotification(`Предмет "${item.name}" продан за ${item.price.toLocaleString()} зв`);
-                }
             };
-            
-            // Апгрейд предметов
-            upgradeButton.addEventListener('click', function() {
+
+            window.sellInventoryItem = function(id) {
+                const index = inventory.findIndex(i => i.inventoryId === id);
+                if (index === -1) return;
+
+                const item = inventory[index];
+                balance += item.price;
+                balanceElement.textContent = balance;
+
+                inventory.splice(index, 1);
+                selectedItems = selectedItems.filter(s => s.inventoryId !== id);
+
+                updateInventoryDisplay();
+                updateUpgradeSelection();
+                upgradeButton.disabled = selectedItems.length !== 2;
+
+                showNotification(`Продан: ${item.name} (+${item.price.toLocaleString()} зв)`);
+            };
+
+            function updateUpgradeSelection() {
+                const [item1, item2] = selectedItems;
+
+                upgradeItem1.innerHTML = item1
+                    ? `<img src="${item1.image}"><div class="item-name">${item1.name}</div>`
+                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
+
+                upgradeItem2.innerHTML = item2
+                    ? `<img src="${item2.image}"><div class="item-name">${item2.name}</div>`
+                    : `<img src="" alt=""><div class="item-name">Выберите предмет</div>`;
+            }
+
+            // Апгрейд
+            upgradeButton.addEventListener('click', startUpgrade);
+
+            function startUpgrade() {
                 if (selectedItems.length !== 2) return;
-                
+
                 upgradeButton.disabled = true;
-                
-                // Удаляем выбранные предметы из инвентаря
+                upgradeResult.style.display = 'none';
+
+                // Удаляем предметы
                 selectedItems.forEach(item => {
-                    const itemIndex = inventory.findIndex(invItem => invItem.inventoryId === item.inventoryId);
-                    if (itemIndex !== -1) {
-                        inventory.splice(itemIndex, 1);
-                    }
+                    const idx = inventory.findIndex(i => i.inventoryId === item.inventoryId);
+                    if (idx !== -1) inventory.splice(idx, 1);
                 });
-                
-                // Анимация вращения колеса
-                const spinDuration = 3000; // 3 секунды
-                const startTime = Date.now();
-                
-                const spinWheel = () => {
-                    const currentTime = Date.now();
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / spinDuration, 1);
-                    
-                    // Замедление в конце
-                    const easeOut = 1 - Math.pow(1 - progress, 3);
-                    const rotation = easeOut * 1800; // 5 полных оборотов
-                    
-                    wheelCircle.style.transform = `rotate(${rotation}deg)`;
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(spinWheel);
+                updateInventoryDisplay();
+
+                // Анимация колеса
+                const spins = 5 + Math.random() * 3;
+                const success = Math.random() < 0.3;
+                const finalRotation = spins * 360 + (success ? 0 : 180 + Math.random() * 180);
+                const duration = 3000;
+
+                wheelCircle.style.transition = `transform ${duration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
+                wheelCircle.style.transform = `rotate(${finalRotation}deg)`;
+
+                setTimeout(() => {
+                    if (success) {
+                        const baseItem = selectedItems[0];
+                        const newItem = {
+                            ...baseItem,
+                            inventoryId: Date.now() + Math.random(),
+                            name: "★ Улучшенный " + baseItem.name,
+                            price: Math.max(selectedItems[0].price, selectedItems[1].price) * 2
+                        };
+                        addToInventory(newItem);
+
+                        upgradeResult.innerHTML = `
+                            <div class="upgrade-success">УСПЕХ! Получен улучшенный предмет!</div>
+                            <img src="${newItem.image}" style="width:100px;height:100px;border-radius:10px;margin:10px 0;">
+                            <div>${newItem.name}</div>
+                            <div>Цена: ${newItem.price.toLocaleString()} зв</div>
+                        `;
+                        showNotification("Апгрейд успешен!");
                     } else {
-                        // Определяем результат
-                        const finalAngle = rotation % 360;
-                        const success = finalAngle >= 0 && finalAngle <= 108; // 30% шанс успеха
-                        
-                        // Показываем результат
-                        if (success) {
-                            // Создаем новый предмет с увеличенной ценой
-                            const newItem = {
-                                ...selectedItems[0],
-                                inventoryId: Date.now() + Math.random(),
-                                price: Math.max(selectedItems[0].price, selectedItems[1].price) * 2,
-                                name: "Улучшенный " + selectedItems[0].name
-                            };
-                            
-                            // Добавляем новый предмет в инвентарь
-                            addToInventory(newItem);
-                            
-                            upgradeResult.innerHTML = `
-                                <div class="upgrade-success">Апгрейд успешен! Вы получили улучшенный предмет!</div>
-                                <img src="${newItem.image}" alt="${newItem.name}" style="width: 100px; height: 100px; margin-top: 10px; border-radius: 10px;">
-                                <div>${newItem.name}</div>
-                                <div>Цена: ${newItem.price.toLocaleString()} зв</div>
-                            `;
-                            
-                            showNotification("Апгрейд успешен! Получен улучшенный предмет");
-                        } else {
-                            upgradeResult.innerHTML = `
-                                <div class="upgrade-fail">Апгрейд не удался! Оба предмета сгорели.</div>
-                            `;
-                            showNotification("Апгрейд не удался! Предметы сгорели");
-                        }
-                        
-                        upgradeResult.style.display = 'block';
-                        
-                        // Сбрасываем выбор
+                        upgradeResult.innerHTML = `<div class="upgrade-fail">Провал! Предметы сгорели...</div>`;
+                        showNotification("Апгрейд провалился!");
+                    }
+
+                    upgradeResult.style.display = 'block';
+
+                    setTimeout(() => {
+                        wheelCircle.style.transition = 'none';
+                        wheelCircle.style.transform = 'rotate(0deg)';
+                        setTimeout(() => {
+                            wheelCircle.style.transition = `transform 3000ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
+                        }, 50);
                         selectedItems = [];
                         updateUpgradeSelection();
-                        
-                        // Сбрасываем колесо через 3 секунды
-                        setTimeout(() => {
-                            wheelCircle.style.transform = 'rotate(0deg)';
-                            upgradeResult.style.display = 'none';
-                            upgradeButton.disabled = selectedItems.length !== 2;
-                        }, 3000);
-                    }
-                };
-                
-                spinWheel();
-            });
-            
-            // Функция показа уведомления
-            function showNotification(message) {
-                // Создаем элемент уведомления
-                const notification = document.createElement('div');
-                notification.textContent = message;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 15px 20px;
-                    border-radius: 10px;
-                    border-left: 4px solid #ff9a00;
-                    z-index: 1000;
-                    font-size: 1rem;
-                    max-width: 300px;
-                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-                    animation: slideIn 0.3s ease-out;
+                        upgradeButton.disabled = true;
+                    }, 3000);
+
+                }, duration);
+            }
+
+            // Уведомления
+            function showNotification(msg) {
+                const notif = document.createElement('div');
+                notif.textContent = msg;
+                notif.style.cssText = `
+                    position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.9);
+                    color: white; padding: 15px 25px; border-radius: 12px; font-size: 1rem;
+                    z-index: 10000; border-left: 5px solid #ff9a00; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+                    animation: notifIn 0.4s ease-out;
                 `;
-                
-                document.body.appendChild(notification);
-                
-                // Удаляем уведомление через 3 секунды
+                document.body.appendChild(notif);
+
                 setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            document.body.removeChild(notification);
-                        }
-                    }, 300);
+                    notif.style.animation = 'notifOut 0.4s ease-in';
+                    setTimeout(() => notif.remove(), 400);
                 }, 3000);
             }
-            
-            // Добавляем стили для анимации уведомлений
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // Инициализация инвентаря при загрузке
-            updateInventoryDisplay();
+
+            // Галерея предметов
+            function renderItemsGrid() {
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <img src="${item.image}">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toLocaleString()} зв</div>
+                    `;
+                    itemsGrid.appendChild(card);
+                });
+            }
         });
     </script>
 </body>
