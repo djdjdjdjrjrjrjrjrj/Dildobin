@@ -48,63 +48,90 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 10px 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
-        .cases-row {
+        /* Круг из трёх кейсов */
+        .cases-circle {
+            position: relative;
+            width: 420px;
+            height: 420px;
+            margin: 40px auto;
             display: flex;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            width: 100%;
-            margin-bottom: 30px;
+            align-items: center;
         }
+        
+        .case-orbit {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.5s ease;
+        }
+        
+        .case-orbit:nth-child(1) { transform: rotate(0deg) translateX(150px) rotate(-0deg); }
+        .case-orbit:nth-child(2) { transform: rotate(120deg) translateX(150px) rotate(-120deg); }
+        .case-orbit:nth-child(3) { transform: rotate(240deg) translateX(150px) rotate(-240deg); }
         
         .case-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            max-width: 320px;
-            position: relative;
+            width: 100%;
         }
         
         .case-image {
-            width: 300px;
-            height: 300px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s;
             filter: brightness(0.7);
+            border: 5px solid transparent;
         }
         
         .case-image.unlocked {
             filter: brightness(1);
+            border: 5px solid #ff9a00;
         }
         
         .case-image:hover.unlocked {
-            transform: scale(1.05);
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 154, 0, 0.5);
         }
         
         .case-info {
             margin-top: 15px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             text-align: center;
+            font-weight: bold;
         }
         
         .spin-button {
             background: linear-gradient(45deg, #ff9a00, #ff6a00);
             border: none;
             color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
+            padding: 12px 35px;
+            font-size: 1.1rem;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 15px;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spin-button.visible {
+            opacity: 1;
+            pointer-events: auto;
         }
         
         .spin-button:hover {
@@ -125,8 +152,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -136,13 +163,14 @@
             color: #ff9a00;
             text-shadow: 0 0 10px #ff9a00;
             cursor: pointer;
+            border: 5px dashed #ff9a00;
         }
         
         .lock-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
         }
-        
+
         /* Модальное окно для промокода */
         .promo-modal {
             position: fixed;
@@ -150,7 +178,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -166,14 +194,14 @@
         }
         
         .promo-modal-content {
-            background: rgba(20, 20, 40, 0.95);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             padding: 40px;
-            border-radius: 20px;
-            border: 2px solid #ff9a00;
+            border-radius: 25px;
+            border: 3px solid #ff9a00;
             width: 90%;
             max-width: 500px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(255, 106, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 106, 0, 0.4);
             transform: scale(0.8);
             transition: transform 0.3s ease;
         }
@@ -183,181 +211,312 @@
         }
         
         .promo-modal h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 20px;
             color: #ff9a00;
+            text-shadow: 0 0 10px #ff9a00;
         }
         
         .promo-modal input {
             width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
+            padding: 18px;
+            font-size: 1.3rem;
             border: 2px solid #ff9a00;
             border-radius: 15px;
             background: rgba(0, 0, 0, 0.5);
             color: white;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
         }
         
         .promo-modal input::placeholder {
             color: #aaa;
+            letter-spacing: normal;
         }
         
         .promo-modal-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
         }
         
         .promo-modal .btn {
-            padding: 12px 30px;
+            padding: 14px 40px;
             border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
+            border-radius: 30px;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: bold;
         }
         
         .promo-modal .btn-primary {
             background: linear-gradient(45deg, #9c27b0, #e91e63);
             color: white;
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
         }
         
         .promo-modal .btn-secondary {
-            background: #666;
+            background: #444;
             color: white;
         }
         
         .promo-modal .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
         
         .promo-modal .close-btn {
             position: absolute;
             top: 15px;
             right: 20px;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #ff9a00;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .promo-modal .close-btn:hover {
-            transform: rotate(90deg);
+            transform: rotate(90deg) scale(1.2);
         }
 
-        /* Остальные стили (spin, result, upgrade, inventory) — без изменений */
+        /* Остальные секции */
         .spin-area, .result-container, .possible-items, .upgrade-section, .inventory-section, .section-divider {
-            /* (все стили из предыдущей версии) */
+            max-width: 1000px;
+            width: 100%;
+            margin: 40px auto;
         }
-        
-        /* ... (остальные стили без изменений) ... */
+
+        .spin-area {
+            height: 180px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #ff9a00;
+            display: none;
+        }
+
+        .spin-items {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transition: transform 0.1s linear;
+        }
+
+        .spin-item {
+            width: 180px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .spin-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .spin-item-name {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .center-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ff9a00;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px #ff9a00;
+            z-index: 10;
+        }
+
+        .result-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            border-radius: 20px;
+            border: 3px solid #ff9a00;
+        }
+
+        .result-image {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .sell-button, .keep-button {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sell-button {
+            background: linear-gradient(45deg, #00c853, #00e676);
+        }
+
+        .keep-button {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+        }
+
+        .possible-items h2, .upgrade-section h2, .inventory-section h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ff9a00;
+            font-size: 2rem;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-card img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff9a00, transparent);
+            margin: 50px 0;
+        }
+
+        @keyframes notifIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes notifOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Приветствуем Вас в Plotnikov Peppers</h1>
+        <h1>Plotnikov Peppers</h1>
         
         <div class="balance-container">
             Баланс: <span id="balance">10</span> зв
         </div>
         
-        <!-- Три кейса -->
-        <div class="cases-row">
-            <!-- Кейс TON -->
-            <div class="case-block">
-                <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="Кейс TON" class="case-image unlocked" id="tonCaseImage">
-                <div class="case-info">Кейс TON<br>Цена: 5 зв</div>
-                <button class="spin-button" id="tonSpinButton" disabled>Крутить за 5 зв</button>
+        <!-- Круг из трёх кейсов -->
+        <div class="cases-circle">
+            <!-- TON -->
+            <div class="case-orbit">
+                <div class="case-block">
+                    <div class="lock-overlay" style="display: none;"></div>
+                    <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="TON" class="case-image unlocked" id="tonCaseImage">
+                    <div class="case-info">TON<br><small>5 зв</small></div>
+                    <button class="spin-button" id="tonSpinButton" disabled>Крутить</button>
+                </div>
             </div>
 
-            <!-- Кейс Peppers -->
-            <div class="case-block">
-                <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Кейс Peppers" class="case-image unlocked" id="peppersCaseImage">
-                <div class="case-info">Кейс Plotnikov Peppers<br>Цена: 1 зв</div>
-                <button class="spin-button" id="peppersSpinButton" disabled>Крутить за 1 зв</button>
+            <!-- Peppers -->
+            <div class="case-orbit">
+                <div class="case-block">
+                    <div class="lock-overlay" style="display: none;"></div>
+                    <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Peppers" class="case-image unlocked" id="peppersCaseImage">
+                    <div class="case-info">Peppers<br><small>1 зв</small></div>
+                    <button class="spin-button" id="peppersSpinButton" disabled>Крутить</button>
+                </div>
             </div>
 
-            <!-- Кейс Промо -->
-            <div class="case-block" id="promoCaseBlock">
-                <div class="lock-overlay" id="promoLock">
-                    <div class="lock-icon">Lock</div>
-                    <div>Кликни, чтобы ввести промокод</div>
+            <!-- Promo -->
+            <div class="case-orbit">
+                <div class="case-block" id="promoCaseBlock">
+                    <div class="lock-overlay" id="promoLock">
+                        <div class="lock-icon">Lock</div>
+                        <div>Промокод</div>
+                    </div>
+                    <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200" alt="Promo" class="case-image" id="promoCaseImage">
+                    <div class="case-info">Промо<br><small style="color:#00e676;">Бесплатно</small></div>
+                    <button class="spin-button" id="promoSpinButton" disabled style="display:none;">Крутить</button>
                 </div>
-                <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200" alt="Кейс Промо" class="case-image" id="promoCaseImage">
-                <div class="case-info">
-                    Кейс Промо<br>
-                    <span style="font-size: 1rem; color: #00e676;">Бесплатно по промокоду</span>
-                </div>
-                <button class="spin-button" id="promoSpinButton" disabled style="display: none;">Крутить бесплатно</button>
             </div>
         </div>
-        
-        <!-- Спин и результат -->
+
+        <!-- Спин -->
         <div class="spin-area" id="spinArea">
             <div class="spin-items" id="spinItems"></div>
             <div class="center-line"></div>
         </div>
-        
+
+        <!-- Результат -->
         <div class="result-container" id="resultContainer">
             <div class="result-title">Поздравляем!</div>
             <div class="result-info">Вам выпал:</div>
-            <img src="" alt="Результат" class="result-image" id="resultImage">
+            <img src="" alt="" class="result-image" id="resultImage">
             <div class="result-info" id="resultItemName"></div>
-            <div class="result-info">Цена: <span id="prizeValue">1000000</span> зв</div>
+            <div class="result-info">Цена: <span id="prizeValue">0</span> зв</div>
             <div class="result-buttons">
                 <button class="sell-button" id="sellButton">Продать</button>
-                <button class="keep-button" id="keepButton">Оставить в инвентаре</button>
+                <button class="keep-button" id="keepButton">Оставить</button>
             </div>
         </div>
-        
+
         <div class="section-divider"></div>
-        
+
+        <!-- Возможные выигрыши -->
         <div class="possible-items">
             <h2>Возможные выигрыши</h2>
             <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
-                <div><h3 style="text-align: center; color: #00c853;">Кейс TON</h3><div class="items-grid" id="tonItemsGrid"></div></div>
-                <div><h3 style="text-align: center; color: #ff9a00;">Кейс Peppers</h3><div class="items-grid" id="peppersItemsGrid"></div></div>
-                <div><h3 style="text-align: center; color: #e91e63;">Кейс Промо</h3><div class="items-grid" id="promoItemsGrid"></div></div>
+                <div><h3 style="color:#00c853; text-align:center;">TON</h3><div class="items-grid" id="tonItemsGrid"></div></div>
+                <div><h3 style="color:#ff9a00; text-align:center;">Peppers</h3><div class="items-grid" id="peppersItemsGrid"></div></div>
+                <div><h3 style="color:#e91e63; text-align:center;">Промо</h3><div class="items-grid" id="promoItemsGrid"></div></div>
             </div>
         </div>
-        
-        <div class="section-divider"></div>
-        
-        <!-- Апгрейд и инвентарь -->
-        <div class="upgrade-section">
-            <h2>Апгрейд скинов</h2>
-            <div class="upgrade-container">
-                <div class="upgrade-item" id="upgradeItem1"><img src="" alt=""><div class="item-name">Выберите предмет</div></div>
-                <div class="upgrade-arrow">Arrow Right</div>
-                <div class="upgrade-item" id="upgradeItem2"><img src="" alt=""><div class="item-name">Выберите предмет</div></div>
-            </div>
-            <div class="upgrade-wheel">
-                <div class="wheel-circle" id="wheelCircle"><div class="wheel-pointer"></div></div>
-            </div>
-            <button class="wheel-spin-button" id="upgradeButton" disabled>Апгрейд</button>
-            <div class="upgrade-result" id="upgradeResult"></div>
-        </div>
-        
-        <div class="section-divider"></div>
-        
-        <div class="inventory-section">
-            <h2>Инвентарь</h2>
-            <div class="inventory-grid" id="inventoryGrid"><div class="empty-inventory">Инвентарь пуст</div></div>
-        </div>
-    </div>
 
-    <!-- Модальное окно для промокода -->
-    <div class="promo-modal" id="promoModal">
-        <div class="promo-modal-content">
-            <div class="close-btn" id="closeModal">X</div>
-            <h2>Введи промокод</h2>
-            <input type="text" id="promoInputModal" placeholder="Например: PLOTNIKOV" autocomplete="off">
-            <div class="promo-modal-buttons">
-                <button class="btn btn-primary" id="activatePromo">Активировать</button>
-                <button class="btn btn-secondary" id="cancelPromo">Отмена</button>
+        <!-- Модальное окно -->
+        <div class="promo-modal" id="promoModal">
+            <div class="promo-modal-content">
+                <div class="close-btn" id="closeModal">X</div>
+                <h2>Введи промокод</h2>
+                <input type="text" id="promoInputModal" placeholder="PLOTNIKOV" autocomplete="off">
+                <div class="promo-modal-buttons">
+                    <button class="btn btn-primary" id="activatePromo">Активировать</button>
+                    <button class="btn btn-secondary" id="cancelPromo">Отмена</button>
+                </div>
             </div>
         </div>
     </div>
@@ -365,168 +524,223 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Элементы
-            const balanceElement = document.getElementById('balance');
-            const tonCaseImage = document.getElementById('tonCaseImage');
-            const tonSpinButton = document.getElementById('tonSpinButton');
-            const peppersCaseImage = document.getElementById('peppersCaseImage');
-            const peppersSpinButton = document.getElementById('peppersSpinButton');
-            const promoCaseImage = document.getElementById('promoCaseImage');
-            const promoSpinButton = document.getElementById('promoSpinButton');
+            const balanceEl = document.getElementById('balance');
+            const tonImg = document.getElementById('tonCaseImage');
+            const peppersImg = document.getElementById('peppersCaseImage');
+            const promoImg = document.getElementById('promoCaseImage');
             const promoLock = document.getElementById('promoLock');
             const promoModal = document.getElementById('promoModal');
-            const promoInputModal = document.getElementById('promoInputModal');
-            const activatePromo = document.getElementById('activatePromo');
-            const cancelPromo = document.getElementById('cancelPromo');
-            const closeModal = document.getElementById('closeModal');
+            const promoInput = document.getElementById('promoInputModal');
+            const activateBtn = document.getElementById('activatePromo');
+            const cancelBtn = document.getElementById('cancelPromo');
+            const closeBtn = document.getElementById('closeModal');
             const spinArea = document.getElementById('spinArea');
             const spinItems = document.getElementById('spinItems');
-            const resultContainer = document.getElementById('resultContainer');
-            const resultImage = document.getElementById('resultImage');
-            const resultItemName = document.getElementById('resultItemName');
-            const prizeValue = document.getElementById('prizeValue');
-            const sellButton = document.getElementById('sellButton');
-            const keepButton = document.getElementById('keepButton');
-            const tonItemsGrid = document.getElementById('tonItemsGrid');
-            const peppersItemsGrid = document.getElementById('peppersItemsGrid');
-            const promoItemsGrid = document.getElementById('promoItemsGrid');
-            const inventoryGrid = document.getElementById('inventoryGrid');
-            const upgradeItem1 = document.getElementById('upgradeItem1');
-            const upgradeItem2 = document.getElementById('upgradeItem2');
-            const upgradeButton = document.getElementById('upgradeButton');
-            const wheelCircle = document.getElementById('wheelCircle');
-            const upgradeResult = document.getElementById('upgradeResult');
+            const resultCont = document.getElementById('resultContainer');
+            const resultImg = document.getElementById('resultImage');
+            const resultName = document.getElementById('resultItemName');
+            const prizeVal = document.getElementById('prizeValue');
+            const sellBtn = document.getElementById('sellButton');
+            const keepBtn = document.getElementById('keepButton');
+            const tonGrid = document.getElementById('tonItemsGrid');
+            const peppersGrid = document.getElementById('peppersItemsGrid');
+            const promoGrid = document.getElementById('promoItemsGrid');
+
+            // Кнопки спина
+            const tonSpin = document.getElementById('tonSpinButton');
+            const peppersSpin = document.getElementById('peppersSpinButton');
+            const promoSpin = document.getElementById('promoSpinButton');
 
             // Состояние
             let balance = 10;
             let isSpinning = false;
-            let currentWinItem = null;
-            let inventory = [];
-            let selectedItems = [];
+            let winItem = null;
             let currentCase = null;
             let promoUnlocked = false;
-
             const PROMO_CODE = "PLOTNIKOV";
 
             // Предметы
             const tonItems = [
-                { id: 101, name: "NFT Павел Дуров", image: "https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg", price: 2500000 },
-                { id: 102, name: "TON Кристалл", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvdG9uLWNye  ...", price: 1800000 }
+                { id: 1, name: "NFT Дуров", image: "https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg", price: 2500000 },
+                { id: 2, name: "TON Кристалл", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvdG9uLWNyeXN0YWwtMTAxLndlYnA.webp", price: 1800000 }
             ];
 
             const peppersItems = [
-                { id: 1, name: "Редкий Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp", price: 1000000 },
-                { id: 2, name: "Эпический Плюш Пепе", image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp", price: 500000 }
+                { id: 3, name: "Редкий Пепе", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTEyNDkud2VicA.webp", price: 1000000 },
+                { id: 4, name: "Эпик Пепе", image: "https://cache.tonapi.io/imgproxy/HmV4XnZ4mSWc1Vss6Be_PIoEjcvaKhsuBw1gEUcdHkw/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvcGx1c2hwZXBlLTExODQud2VicA.webp", price: 500000 }
             ];
 
             const promoItems = [
-                { id: 201, name: "Подарок: Сердце", image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200", price: 500000 },
-                { id: 202, name: "Подарок: Цветы", image: "https://i.pinimg.com/736x/8a/9e/8b/8a9e8b9f8e9d8a7b6c5d4e3f2g1h0i9j.jpg", price: 300000 },
-                { id: 203, name: "Подарок: Мишка", image: "https://example.com/bear.jpg", price: 400000 }
+                { id: 5, name: "Сердце", image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200", price: 500000 },
+                { id: 6, name: "Цветы", image: "https://i.pinimg.com/736x/8a/9e/8b/8a9e8b9f8e9d8a7b6c5d4e3f2g1h0i9j.jpg", price: 300000 }
             ];
 
             // Инициализация
-            balanceElement.textContent = balance;
-            renderItemsGrid(tonItems, tonItemsGrid);
-            renderItemsGrid(peppersItems, peppersItemsGrid);
-            renderItemsGrid(promoItems, promoItemsGrid);
-            updateInventoryDisplay();
+            balanceEl.textContent = balance;
+            renderGrid(tonItems, tonGrid);
+            renderGrid(peppersItems, peppersGrid);
+            renderGrid(promoItems, promoGrid);
 
             // Модальное окно
             promoLock.addEventListener('click', () => {
                 if (!promoUnlocked) {
                     promoModal.classList.add('show');
-                    setTimeout(() => promoInputModal.focus(), 300);
+                    setTimeout(() => promoInput.focus(), 300);
                 }
             });
 
-            closeModal.addEventListener('click', closePromoModal);
-            cancelPromo.addEventListener('click', closePromoModal);
+            closeBtn.onclick = cancelBtn.onclick = () => {
+                promoModal.classList.remove('show');
+                promoInput.value = '';
+            };
+
             promoModal.addEventListener('click', (e) => {
-                if (e.target === promoModal) closePromoModal();
+                if (e.target === promoModal) cancelBtn.click();
             });
 
-            function closePromoModal() {
-                promoModal.classList.remove('show');
-                promoInputModal.value = '';
-            }
-
-            activatePromo.addEventListener('click', () => {
-                const code = promoInputModal.value.trim().toUpperCase();
-                if (code === PROMO_CODE) {
+            activateBtn.onclick = () => {
+                if (promoInput.value.trim().toUpperCase() === PROMO_CODE) {
                     promoUnlocked = true;
                     promoLock.style.display = 'none';
-                    promoCaseImage.classList.add('unlocked');
-                    promoSpinButton.style.display = 'block';
-                    closePromoModal();
-                    showNotification("Промокод активирован! Кейс разблокирован!");
+                    promoImg.classList.add('unlocked');
+                    promoSpin.style.display = 'block';
+                    promoModal.classList.remove('show');
+                    showNotif("Кейс разблокирован!");
                 } else {
-                    showNotification("Неверный промокод!");
+                    showNotif("Неверный промокод!");
                 }
-            });
+            };
 
-            promoInputModal.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') activatePromo.click();
+            promoInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') activateBtn.click();
             });
 
             // Клик по кейсам
-            tonCaseImage.addEventListener('click', () => {
-                if (balance >= 5 && !isSpinning) {
-                    disableAllSpinButtons();
-                    tonSpinButton.disabled = false;
-                    currentCase = 'ton';
-                }
-            });
+            tonImg.onclick = () => selectCase('ton', 5, tonSpin);
+            peppersImg.onclick = () => selectCase('peppers', 1, peppersSpin);
+            promoImg.onclick = () => promoUnlocked && selectCase('promo', 0, promoSpin);
 
-            peppersCaseImage.addEventListener('click', () => {
-                if (balance >= 1 && !isSpinning) {
-                    disableAllSpinButtons();
-                    peppersSpinButton.disabled = false;
-                    currentCase = 'peppers';
-                }
-            });
-
-            promoCaseImage.addEventListener('click', () => {
-                if (promoUnlocked && !isSpinning) {
-                    disableAllSpinButtons();
-                    promoSpinButton.disabled = false;
-                    currentCase = 'promo';
-                }
-            });
-
-            // Спин
-            tonSpinButton.addEventListener('click', () => startSpin(5, tonItems));
-            peppersSpinButton.addEventListener('click', () => startSpin(1, peppersItems));
-            promoSpinButton.addEventListener('click', () => startSpin(0, promoItems));
-
-            // ... (остальной код спина, инвентаря, апгрейда — как в предыдущей версии) ...
-            // (вставь сюда функции startSpin, showResult, resetSpin, updateInventoryDisplay и т.д.)
-
-            function disableAllSpinButtons() {
-                tonSpinButton.disabled = true;
-                peppersSpinButton.disabled = true;
-                promoSpinButton.disabled = true;
+            function selectCase(type, cost, btn) {
+                if (isSpinning || (cost > 0 && balance < cost)) return;
+                disableAll();
+                btn.classList.add('visible');
+                btn.disabled = false;
+                currentCase = type;
             }
 
-            function showNotification(msg) {
-                const notif = document.createElement('div');
-                notif.textContent = msg;
-                notif.style.cssText = `position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.9); color: white; padding: 15px 25px; border-radius: 12px; font-size: 1rem; z-index: 10000; border-left: 5px solid #ff9a00; box-shadow: 0 5px 20px rgba(0,0,0,0.5); animation: notifIn 0.4s ease-out;`;
-                document.body.appendChild(notif);
+            // Спин
+            tonSpin.onclick = () => spin(5, tonItems);
+            peppersSpin.onclick = () => spin(1, peppersItems);
+            promoSpin.onclick = () => spin(0, promoItems);
+
+            function spin(cost, items) {
+                if (isSpinning || (cost > 0 && balance < cost)) return;
+                isSpinning = true;
+                disableAll();
+                if (cost > 0) {
+                    balance -= cost;
+                    balanceEl.textContent = balance;
+                }
+
+                spinArea.style.display = 'block';
+                resultCont.style.display = 'none';
+                spinItems.innerHTML = '';
+
+                const total = 40;
+                const width = 180;
+                const center = Math.floor(total / 2);
+                const winIdx = Math.floor(Math.random() * items.length);
+                winItem = { ...items[winIdx] };
+
+                for (let i = 0; i < total; i++) {
+                    const item = items[Math.floor(Math.random() * items.length)];
+                    const div = document.createElement('div');
+                    div.className = 'spin-item';
+                    div.innerHTML = `<img src="${item.image}" class="spin-item-image"><div class="spin-item-name">${item.name}</div>`;
+                    spinItems.appendChild(div);
+                }
+
+                const target = -(center * width) + (spinArea.offsetWidth / 2 - width / 2);
+                let pos = 0;
+                const duration = 3000;
+                const start = Date.now();
+
+                function animate() {
+                    const elapsed = Date.now() - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    pos = ease * (target + total * width * 2);
+                    spinItems.style.transform = `translateX(${-pos}px)`;
+                    if (progress < 1) requestAnimationFrame(animate);
+                    else {
+                        spinItems.style.transform = `translateX(${target}px)`;
+                        setTimeout(showResult, 600);
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            function showResult() {
+                resultImg.src = winItem.image;
+                resultName.textContent = winItem.name;
+                prizeVal.textContent = winItem.price.toLocaleString();
+                resultCont.style.display = 'flex';
+                isSpinning = false;
+                updateButtons();
+            }
+
+            function updateButtons() {
+                tonSpin.disabled = balance < 5;
+                peppersSpin.disabled = balance < 1;
+                promoSpin.disabled = !promoUnlocked;
+            }
+
+            function disableAll() {
+                [tonSpin, peppersSpin, promoSpin].forEach(b => {
+                    b.classList.remove('visible');
+                    b.disabled = true;
+                });
+            }
+
+            sellBtn.onclick = () => {
+                balance += winItem.price;
+                balanceEl.textContent = balance;
+                reset();
+                showNotif(`+${winItem.price.toLocaleString()} зв`);
+            };
+
+            keepBtn.onclick = () => {
+                reset();
+                showNotif(`${winItem.name} в инвентаре`);
+            };
+
+            function reset() {
+                resultCont.style.display = 'none';
+                spinArea.style.display = 'none';
+                updateButtons();
+                winItem = null;
+            }
+
+            function showNotif(msg) {
+                const n = document.createElement('div');
+                n.textContent = msg;
+                n.style.cssText = `position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.9);color:white;padding:15px 25px;border-radius:12px;font-size:1rem;z-index:10000;border-left:5px solid #ff9a00;animation:notifIn .4s ease-out;`;
+                document.body.appendChild(n);
                 setTimeout(() => {
-                    notif.style.animation = 'notifOut 0.4s ease-in';
-                    setTimeout(() => notif.remove(), 400);
+                    n.style.animation = 'notifOut .4s ease-in';
+                    setTimeout(() => n.remove(), 400);
                 }, 3000);
             }
 
-            function renderItemsGrid(items, grid) {
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.innerHTML = `<img src="${item.image}"><div class="item-name">${item.name}</div><div class="item-price">${item.price.toLocaleString()} зв</div>`;
-                    grid.appendChild(card);
+            function renderGrid(items, grid) {
+                items.forEach(i => {
+                    const c = document.createElement('div');
+                    c.className = 'item-card';
+                    c.innerHTML = `<img src="${i.image}"><div class="item-name">${i.name}</div><div class="item-price">${i.price.toLocaleString()} зв</div>`;
+                    grid.appendChild(c);
                 });
             }
         });
     </script>
 </body>
-    </html>
+</html>
