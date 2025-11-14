@@ -26,12 +26,11 @@
         }
         
         .container {
-            max-width: 1600px;
+            max-width: 1400px;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
         }
         
         h1 {
@@ -46,85 +45,78 @@
         
         .balance-container {
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 25px;
+            border-radius: 12px;
             margin-bottom: 30px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
-        /* Круг из трёх кейсов */
-        .cases-circle {
-            position: relative;
-            width: 420px;
-            height: 420px;
-            margin: 40px auto;
+        /* Кейсы в ряд */
+        .cases-row {
             display: flex;
             justify-content: center;
-            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-bottom: 40px;
         }
-        
-        .case-orbit {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.5s ease;
-        }
-        
-        .case-orbit:nth-child(1) { transform: rotate(0deg) translateX(150px) rotate(-0deg); }
-        .case-orbit:nth-child(2) { transform: rotate(120deg) translateX(150px) rotate(-120deg); }
-        .case-orbit:nth-child(3) { transform: rotate(240deg) translateX(150px) rotate(-240deg); }
         
         .case-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            width: 320px;
+            position: relative;
         }
         
         .case-image {
-            width: 100%;
-            height: 100%;
+            width: 300px;
+            height: 300px;
             object-fit: cover;
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
             cursor: pointer;
             transition: all 0.3s;
             filter: brightness(0.7);
-            border: 5px solid transparent;
+            border: 4px solid transparent;
         }
         
         .case-image.unlocked {
             filter: brightness(1);
-            border: 5px solid #ff9a00;
+            border: 4px solid #ff9a00;
         }
         
         .case-image:hover.unlocked {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(255, 154, 0, 0.5);
+            transform: scale(1.07);
+            box-shadow: 0 20px 40px rgba(255, 154, 0, 0.4);
         }
         
         .case-info {
-            margin-top: 15px;
-            font-size: 1.3rem;
+            margin-top: 18px;
+            font-size: 1.6rem;
             text-align: center;
             font-weight: bold;
+        }
+        
+        .case-info small {
+            font-size: 1rem;
+            color: #ccc;
+            display: block;
+            margin-top: 5px;
         }
         
         .spin-button {
             background: linear-gradient(45deg, #ff9a00, #ff6a00);
             border: none;
             color: white;
-            padding: 12px 35px;
-            font-size: 1.1rem;
+            padding: 15px 45px;
+            font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.4);
+            box-shadow: 0 6px 18px rgba(255, 106, 0, 0.4);
             opacity: 0;
             pointer-events: none;
         }
@@ -135,12 +127,12 @@
         }
         
         .spin-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 106, 0, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(255, 106, 0, 0.6);
         }
         
         .spin-button:disabled {
-            background: #666;
+            background: #555;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -152,33 +144,33 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 5;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #ff9a00;
-            text-shadow: 0 0 10px #ff9a00;
+            text-shadow: 0 0 12px #ff9a00;
             cursor: pointer;
-            border: 5px dashed #ff9a00;
+            border: 4px dashed #ff9a00;
         }
         
         .lock-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 3rem;
+            margin-bottom: 12px;
         }
 
-        /* Модальное окно для промокода */
+        /* Модальное окно */
         .promo-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.92);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -195,14 +187,14 @@
         
         .promo-modal-content {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 40px;
+            padding: 45px;
             border-radius: 25px;
             border: 3px solid #ff9a00;
             width: 90%;
-            max-width: 500px;
+            max-width: 520px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(255, 106, 0, 0.4);
-            transform: scale(0.8);
+            box-shadow: 0 25px 60px rgba(255, 106, 0, 0.4);
+            transform: scale(0.85);
             transition: transform 0.3s ease;
         }
         
@@ -211,8 +203,8 @@
         }
         
         .promo-modal h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
+            font-size: 2.4rem;
+            margin-bottom: 25px;
             color: #ff9a00;
             text-shadow: 0 0 10px #ff9a00;
         }
@@ -220,19 +212,21 @@
         .promo-modal input {
             width: 100%;
             padding: 18px;
-            font-size: 1.3rem;
-            border: 2px solid #ff9a00;
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.5);
+            font-size: 1.4rem;
+            border: 3px solid #ff9a00;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.6);
             color: white;
             text-align: center;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+            font-weight: bold;
         }
         
         .promo-modal input::placeholder {
-            color: #aaa;
+            color: #999;
             letter-spacing: normal;
+            font-weight: normal;
         }
         
         .promo-modal-buttons {
@@ -242,10 +236,10 @@
         }
         
         .promo-modal .btn {
-            padding: 14px 40px;
+            padding: 15px 45px;
             border: none;
             border-radius: 30px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
@@ -254,47 +248,44 @@
         .promo-modal .btn-primary {
             background: linear-gradient(45deg, #9c27b0, #e91e63);
             color: white;
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            box-shadow: 0 6px 18px rgba(156, 39, 176, 0.4);
         }
         
         .promo-modal .btn-secondary {
-            background: #444;
+            background: #555;
             color: white;
         }
         
         .promo-modal .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
         
         .promo-modal .close-btn {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
+            top: 18px;
+            right: 22px;
+            font-size: 2.2rem;
             color: #ff9a00;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .promo-modal .close-btn:hover {
-            transform: rotate(90deg) scale(1.2);
+            transform: rotate(90deg) scale(1.3);
         }
 
-        /* Остальные секции */
-        .spin-area, .result-container, .possible-items, .upgrade-section, .inventory-section, .section-divider {
-            max-width: 1000px;
-            width: 100%;
-            margin: 40px auto;
-        }
-
+        /* Спин */
         .spin-area {
-            height: 180px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
+            width: 100%;
+            max-width: 900px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 18px;
             overflow: hidden;
             position: relative;
-            border: 3px solid #ff9a00;
+            border: 4px solid #ff9a00;
+            margin: 40px 0;
             display: none;
         }
 
@@ -308,25 +299,26 @@
         }
 
         .spin-item {
-            width: 180px;
+            width: 200px;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 15px;
         }
 
         .spin-item-image {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .spin-item-name {
-            margin-top: 8px;
-            font-size: 0.85rem;
+            margin-top: 10px;
+            font-size: 0.9rem;
             text-align: center;
         }
 
@@ -335,101 +327,118 @@
             left: 50%;
             top: 0;
             bottom: 0;
-            width: 4px;
+            width: 5px;
             background: #ff9a00;
             transform: translateX(-50%);
-            box-shadow: 0 0 15px #ff9a00;
+            box-shadow: 0 0 20px #ff9a00;
             z-index: 10;
         }
 
+        /* Результат */
         .result-container {
             display: none;
             flex-direction: column;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 25px;
-            border-radius: 20px;
-            border: 3px solid #ff9a00;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 25px;
+            border: 4px solid #ff9a00;
+            max-width: 500px;
+            width: 100%;
+            margin: 40px 0;
         }
 
         .result-image {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             object-fit: cover;
             border-radius: 20px;
-            margin: 15px 0;
+            margin: 20px 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
 
         .result-buttons {
             display: flex;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 25px;
         }
 
         .sell-button, .keep-button {
-            padding: 14px 40px;
+            padding: 16px 50px;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: bold;
         }
 
         .sell-button {
             background: linear-gradient(45deg, #00c853, #00e676);
+            box-shadow: 0 6px 18px rgba(0, 200, 83, 0.4);
         }
 
         .keep-button {
             background: linear-gradient(45deg, #2196F3, #21CBF3);
+            box-shadow: 0 6px 18px rgba(33, 150, 243, 0.4);
         }
 
-        .possible-items h2, .upgrade-section h2, .inventory-section h2 {
+        /* Возможные выигрыши */
+        .possible-items {
+            width: 100%;
+            max-width: 1200px;
+            margin: 50px 0;
+        }
+
+        .possible-items h2 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             color: #ff9a00;
-            font-size: 2rem;
+            font-size: 2.2rem;
+        }
+
+        .items-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
+            gap: 18px;
         }
 
         .item-card {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 12px;
+            border-radius: 18px;
+            padding: 15px;
             text-align: center;
             transition: transform 0.3s;
         }
 
         .item-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .item-card img {
             width: 90px;
             height: 90px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
         }
 
         .section-divider {
+            width: 100%;
             height: 3px;
             background: linear-gradient(90deg, transparent, #ff9a00, transparent);
-            margin: 50px 0;
+            margin: 60px 0;
         }
 
-        @keyframes notifIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes notifOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
+        @keyframes notifIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes notifOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -440,39 +449,31 @@
             Баланс: <span id="balance">10</span> зв
         </div>
         
-        <!-- Круг из трёх кейсов -->
-        <div class="cases-circle">
+        <!-- Кейсы в ряд -->
+        <div class="cases-row">
             <!-- TON -->
-            <div class="case-orbit">
-                <div class="case-block">
-                    <div class="lock-overlay" style="display: none;"></div>
-                    <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="TON" class="case-image unlocked" id="tonCaseImage">
-                    <div class="case-info">TON<br><small>5 зв</small></div>
-                    <button class="spin-button" id="tonSpinButton" disabled>Крутить</button>
-                </div>
+            <div class="case-block">
+                <img src="https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg" alt="TON" class="case-image unlocked" id="tonCaseImage">
+                <div class="case-info">Кейс TON<small>5 зв</small></div>
+                <button class="spin-button" id="tonSpinButton" disabled>Крутить</button>
             </div>
 
             <!-- Peppers -->
-            <div class="case-orbit">
-                <div class="case-block">
-                    <div class="lock-overlay" style="display: none;"></div>
-                    <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Peppers" class="case-image unlocked" id="peppersCaseImage">
-                    <div class="case-info">Peppers<br><small>1 зв</small></div>
-                    <button class="spin-button" id="peppersSpinButton" disabled>Крутить</button>
-                </div>
+            <div class="case-block">
+                <img src="https://cdn1.cdn-telegram.org/file/eBvI08_1VZA98t4JG3LV993s9IEdV5OTU6F5lAFsnDii8IebpMVDs8S799luguavxkvteghEiABpQxK15KUcM1YW7S3roIZrBH3ERwRxdH8kNkwyGYoB16fXwS1RdkoM9Zx1yepmqeYUHSNDemzxhbyiDx6PH1166RvQHyTtX4iPnH7denevoBLHjBZMoPbzgi8YtBdd6vIYalbF74RvV7s_7oN-W28_pWpr9rqiNFBS80rZYVkuq-YJzvqVsVXcWmx_EArr5qmm2lFqDjBxhwlMoLR-tPP4NSX6h3UqM8KOHkiMMVlxgxUX2dbkEdInMKIGBuyVlJGpplJD-I3_Zw.jpg" alt="Peppers" class="case-image unlocked" id="peppersCaseImage">
+                <div class="case-info">Кейс Peppers<small>1 зв</small></div>
+                <button class="spin-button" id="peppersSpinButton" disabled>Крутить</button>
             </div>
 
-            <!-- Promo -->
-            <div class="case-orbit">
-                <div class="case-block" id="promoCaseBlock">
-                    <div class="lock-overlay" id="promoLock">
-                        <div class="lock-icon">Lock</div>
-                        <div>Промокод</div>
-                    </div>
-                    <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200" alt="Promo" class="case-image" id="promoCaseImage">
-                    <div class="case-info">Промо<br><small style="color:#00e676;">Бесплатно</small></div>
-                    <button class="spin-button" id="promoSpinButton" disabled style="display:none;">Крутить</button>
+            <!-- Промо -->
+            <div class="case-block" id="promoCaseBlock">
+                <div class="lock-overlay" id="promoLock">
+                    <div class="lock-icon">Lock</div>
+                    <div>Введи промокод</div>
                 </div>
+                <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200" alt="Promo" class="case-image" id="promoCaseImage">
+                <div class="case-info">Кейс Промо<small style="color:#00e676;">Бесплатно</small></div>
+                <button class="spin-button" id="promoSpinButton" disabled style="display:none;">Крутить бесплатно</button>
             </div>
         </div>
 
@@ -497,13 +498,13 @@
 
         <div class="section-divider"></div>
 
-        <!-- Возможные выигрыши -->
+        <!-- Выигрыши -->
         <div class="possible-items">
             <h2>Возможные выигрыши</h2>
-            <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
-                <div><h3 style="color:#00c853; text-align:center;">TON</h3><div class="items-grid" id="tonItemsGrid"></div></div>
-                <div><h3 style="color:#ff9a00; text-align:center;">Peppers</h3><div class="items-grid" id="peppersItemsGrid"></div></div>
-                <div><h3 style="color:#e91e63; text-align:center;">Промо</h3><div class="items-grid" id="promoItemsGrid"></div></div>
+            <div class="items-row">
+                <div><h3 style="color:#00c853;text-align:center;">TON</h3><div class="items-grid" id="tonItemsGrid"></div></div>
+                <div><h3 style="color:#ff9a00;text-align:center;">Peppers</h3><div class="items-grid" id="peppersItemsGrid"></div></div>
+                <div><h3 style="color:#e91e63;text-align:center;">Промо</h3><div class="items-grid" id="promoItemsGrid"></div></div>
             </div>
         </div>
 
@@ -523,7 +524,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Элементы
             const balanceEl = document.getElementById('balance');
             const tonImg = document.getElementById('tonCaseImage');
             const peppersImg = document.getElementById('peppersCaseImage');
@@ -546,12 +546,10 @@
             const peppersGrid = document.getElementById('peppersItemsGrid');
             const promoGrid = document.getElementById('promoItemsGrid');
 
-            // Кнопки спина
             const tonSpin = document.getElementById('tonSpinButton');
             const peppersSpin = document.getElementById('peppersSpinButton');
             const promoSpin = document.getElementById('promoSpinButton');
 
-            // Состояние
             let balance = 10;
             let isSpinning = false;
             let winItem = null;
@@ -559,7 +557,6 @@
             let promoUnlocked = false;
             const PROMO_CODE = "PLOTNIKOV";
 
-            // Предметы
             const tonItems = [
                 { id: 1, name: "NFT Дуров", image: "https://static43.tgcnt.ru/posts/_0/80/80772e1305ea14d1dc091f6010590764.jpg", price: 2500000 },
                 { id: 2, name: "TON Кристалл", image: "https://cache.tonapi.io/imgproxy/70VIqyeGnFGEcy0LdcARzMf_4i6KXNP1VR-kY0ft4R4/rs:fill:1500:1500:1/g:no/aHR0cHM6Ly9uZnQuZnJhZ21lbnQuY29tL2dpZnQvdG9uLWNyeXN0YWwtMTAxLndlYnA.webp", price: 1800000 }
@@ -571,32 +568,29 @@
             ];
 
             const promoItems = [
-                { id: 5, name: "Сердце", image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200", price: 500000 },
-                { id: 6, name: "Цветы", image: "https://i.pinimg.com/736x/8a/9e/8b/8a9e8b9f8e9d8a7b6c5d4e3f2g1h0i9j.jpg", price: 300000 }
+                { id: 5, name: "Подарок: Сердце", image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e6688fe0b83841b3615a49_67e668b4e5a82b6118c3efd6/scale_1200", price: 500000 },
+                { id: 6, name: "Подарок: Цветы", image: "https://i.pinimg.com/736x/8a/9e/8b/8a9e8b9f8e9d8a7b6c5d4e3f2g1h0i9j.jpg", price: 300000 }
             ];
 
-            // Инициализация
             balanceEl.textContent = balance;
             renderGrid(tonItems, tonGrid);
             renderGrid(peppersItems, peppersGrid);
             renderGrid(promoItems, promoGrid);
 
             // Модальное окно
-            promoLock.addEventListener('click', () => {
+            promoLock.onclick = () => {
                 if (!promoUnlocked) {
                     promoModal.classList.add('show');
                     setTimeout(() => promoInput.focus(), 300);
                 }
-            });
+            };
 
             closeBtn.onclick = cancelBtn.onclick = () => {
                 promoModal.classList.remove('show');
                 promoInput.value = '';
             };
 
-            promoModal.addEventListener('click', (e) => {
-                if (e.target === promoModal) cancelBtn.click();
-            });
+            promoModal.onclick = (e) => { if (e.target === promoModal) cancelBtn.click(); };
 
             activateBtn.onclick = () => {
                 if (promoInput.value.trim().toUpperCase() === PROMO_CODE) {
@@ -611,9 +605,7 @@
                 }
             };
 
-            promoInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') activateBtn.click();
-            });
+            promoInput.onkeypress = (e) => { if (e.key === 'Enter') activateBtn.click(); };
 
             // Клик по кейсам
             tonImg.onclick = () => selectCase('ton', 5, tonSpin);
@@ -637,17 +629,14 @@
                 if (isSpinning || (cost > 0 && balance < cost)) return;
                 isSpinning = true;
                 disableAll();
-                if (cost > 0) {
-                    balance -= cost;
-                    balanceEl.textContent = balance;
-                }
+                if (cost > 0) { balance -= cost; balanceEl.textContent = balance; }
 
                 spinArea.style.display = 'block';
                 resultCont.style.display = 'none';
                 spinItems.innerHTML = '';
 
                 const total = 40;
-                const width = 180;
+                const width = 200;
                 const center = Math.floor(total / 2);
                 const winIdx = Math.floor(Math.random() * items.length);
                 winItem = { ...items[winIdx] };
@@ -724,7 +713,7 @@
             function showNotif(msg) {
                 const n = document.createElement('div');
                 n.textContent = msg;
-                n.style.cssText = `position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.9);color:white;padding:15px 25px;border-radius:12px;font-size:1rem;z-index:10000;border-left:5px solid #ff9a00;animation:notifIn .4s ease-out;`;
+                n.style.cssText = `position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.9);color:white;padding:16px 28px;border-radius:14px;font-size:1.1rem;z-index:10000;border-left:6px solid #ff9a00;animation:notifIn .4s ease-out;box-shadow:0 6px 20px rgba(0,0,0,0.5);`;
                 document.body.appendChild(n);
                 setTimeout(() => {
                     n.style.animation = 'notifOut .4s ease-in';
